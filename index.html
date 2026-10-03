@@ -1,0 +1,2359 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>محاكي الربط المختلط — السادس الإعدادي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lalezar&family=Cairo:wght@600;800;900&display=swap">
+<style>
+:root{
+  --bg:#edf6ff;--ink:#143c78;--line:#cfe0ef;--blue:#1767d7;--blue2:#0c438f;
+  --red:#e64a3b;--green:#15946b;--purple:#6742b8;--paper:#fffefd;
+  --rule:#d9e7f2;--margin:#df6a6a
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+ margin:0;background:linear-gradient(180deg,#edf7ff,#e5f2fc);
+ color:var(--ink);font-family:Tahoma,"Noto Naskh Arabic","Segoe UI",Arial,sans-serif;
+ line-height:1.6
+}
+button,input,select{font-family:inherit}
+.header{
+ background:linear-gradient(135deg,#0d3f8d,#1767d7 60%,#3a8ce8);
+ color:#fff;border-bottom:4px solid #7dc2ff;box-shadow:0 5px 18px #164d8c22
+}
+.header-inner{
+ max-width:1500px;margin:auto;padding:13px 24px;
+ display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:20px
+}
+.brand-side{font-size:15px;font-weight:800;opacity:.92}
+.brand-side.right{text-align:right}
+.header-title{text-align:center}
+.header-title h1{margin:0;font-size:32px;line-height:1.1;font-weight:900}
+.header-title .badge{
+ display:inline-block;margin-top:6px;padding:3px 28px;border-radius:999px;
+ background:#91d2ff;color:#123d75;font-size:18px;font-weight:900
+}
+.wrap{max-width:1500px;margin:auto;padding:20px}
+.dashboard{
+ display:grid;grid-template-columns:330px minmax(390px,1fr) minmax(400px,1.15fr);
+ gap:16px;align-items:stretch
+}
+.column{min-width:0}
+.card{
+ background:#ffffffee;border:1px solid var(--line);border-radius:15px;
+ box-shadow:0 7px 22px #2d6aa016;overflow:hidden
+}
+.card+.card{margin-top:12px}
+.card-head{
+ padding:12px 15px;background:linear-gradient(#fff,#edf7ff);
+ border-bottom:1px solid #d7e7f4;color:#123e78;font-size:18px;font-weight:900;
+ display:flex;align-items:center;justify-content:space-between
+}
+.card-body{padding:14px 15px}
+.head-icon{font-size:20px}
+.vals{display:grid;gap:9px}
+.vals label{display:block;font-weight:900;font-size:15px;margin-bottom:4px}
+.unit-row{display:grid;grid-template-columns:1fr 82px;gap:6px}
+input[type=number],select{
+ width:100%;padding:9px 10px;border:1px solid #c4d9eb;border-radius:9px;
+ background:#fff;color:var(--ink);font-size:15px
+}
+.vals input{direction:ltr;text-align:center;font-weight:700}
+.unit-row select{text-align:center;font-size:14px}
+.reqs{display:grid;gap:7px}
+.req{
+ display:flex;gap:8px;align-items:flex-start;padding:7px 8px;border:1px solid #d7e6f3;
+ border-radius:9px;background:#f8fcff;cursor:pointer;font-size:14px
+}
+.req input{width:18px;height:18px;margin-top:3px;accent-color:var(--blue)}
+.req b{color:var(--blue)}
+.solve{
+ width:100%;margin-top:12px;padding:11px;border:0;border-radius:11px;
+ background:linear-gradient(135deg,#1767d7,#3187e9);color:#fff;font-size:18px;
+ font-weight:900;cursor:pointer;box-shadow:0 5px 12px #1767d733
+}
+.err{margin-top:9px;padding:8px;border-radius:8px;background:#fff0f0;color:#9b2020}
+.circuit-stage{
+ margin:13px;border:1px solid #cbe1f3;border-radius:14px;
+ background:
+      radial-gradient(circle at 28% 32%,rgba(227,75,63,.08),transparent 23%),
+      radial-gradient(circle at 53% 66%,rgba(21,148,107,.08),transparent 24%),
+      radial-gradient(circle at 78% 48%,rgba(45,111,208,.09),transparent 25%),
+      linear-gradient(135deg,#eef8ff,#dceeff);overflow:hidden
+}
+.preview svg{display:block;width:100%;height:auto;padding:10px}
+.circuit-legend{
+ display:flex;justify-content:center;align-items:center;gap:18px;flex-wrap:wrap;
+ padding:7px 10px 11px;font-weight:900;font-size:14px;color:#244b7d;
+ direction:ltr
+}
+.circuit-legend span{display:inline-flex;align-items:center;gap:5px}
+.circuit-legend .lg{width:12px;height:12px;border-radius:50%;display:inline-block}
+.circuit-legend .c1{background:#e34b3f}.circuit-legend .c2{background:#15946b}
+.circuit-legend .c3{background:#2d6fd0}.circuit-legend .c4{background:#e08a2e}.circuit-legend .c5{background:#d04aa8}.circuit-legend .vv{background:#6942bb}
+.info-table{width:100%;border-collapse:separate;border-spacing:0;border:1px solid #d2e3f0;border-radius:10px;overflow:hidden}
+.info-table td{padding:7px 9px;text-align:center;border-bottom:1px solid #deebf4;background:#fff}
+.info-table tr:last-child td{border-bottom:0}
+.info-table td:first-child{font-weight:900;background:#f5faff;width:32%}
+.info-table .c1{color:var(--red)}.info-table .c2{color:var(--green)}
+.info-table .c3{color:#2b68d0}.info-table .c4{color:#d87918}.info-table .c5{color:#c33c96}.info-table .v{color:var(--purple)}
+.req-wrap{display:grid;gap:5px}
+.req-inp{margin:0 26px 2px 0}
+.req-inp input{direction:ltr;text-align:center;font-weight:700}
+.qv{direction:ltr;unicode-bidi:isolate;font-weight:900;color:var(--blue)}
+.note{padding:10px 12px;border:1px solid #c9e0f2;border-radius:10px;background:#edf7ff;color:#214c80;font-size:14px}
+
+.series-method{display:flex;flex-direction:column;gap:8px}
+.series-method label{display:flex;align-items:flex-start;gap:8px;padding:9px 10px;border:1px solid #d6e4ef;border-radius:9px;background:#fff;cursor:pointer;line-height:1.5}
+.series-method label:has(input:checked){border-color:#2675d6;background:#eef7ff}
+.series-method input{margin-top:4px;accent-color:#2675d6}
+.method-note{margin-top:8px;padding:8px 10px;border-radius:8px;background:#f5f9fc;color:#52657d;font-size:12px;line-height:1.6}
+
+.solution-card{min-height:760px;height:100%}
+.solution-card .card-head{background:linear-gradient(135deg,#104ca8,#2675d6);color:#fff;border:0;font-size:20px;justify-content:flex-start;gap:8px}
+.paper-wrap{height:calc(100% - 54px);min-height:700px;overflow:auto;background:#f7fbff}
+.paper{
+ position:relative;min-height:100%;padding:20px 64px 35px 18px;
+ background-color:var(--paper);
+ background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 33px,var(--rule) 33px,var(--rule) 34px);
+ color:#173f82;font-family:"Segoe Print","Bradley Hand","Comic Sans MS","Noto Naskh Arabic",Tahoma,sans-serif;
+ font-size:17px;line-height:34px
+}
+.paper:before{content:"";position:absolute;top:0;bottom:0;right:43px;width:2px;background:var(--margin)}
+.paper:after{content:"";position:absolute;top:0;bottom:0;right:47px;width:1px;background:var(--margin);opacity:.55}
+.ptitle{font-weight:900;font-size:20px;display:inline-block;border-bottom:2px solid #173f82;line-height:30px}
+.phead{display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap}
+.pcirc{width:min(100%,350px)}.pcirc svg{display:block;width:100%;height:auto}
+.pinfo{flex:1 1 190px}.h{font-weight:900;text-decoration:underline;text-underline-offset:4px}
+.given{direction:ltr;text-align:right;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:0 15px}
+.given span{white-space:nowrap}.plist{list-style:none;margin:0;padding:0}.plist li{display:flex;gap:6px}
+.eq{direction:ltr;text-align:center;font-size:20px;line-height:1.2;padding:7px 0;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:6px}
+.fr{display:inline-flex;flex-direction:column;align-items:center;line-height:1.1;vertical-align:middle}
+.fr>span:first-child{border-bottom:1.5px solid #173f82;padding:0 4px}
+.fr>span:last-child{padding:1px 4px 0}
+.ans{
+ margin:7px 0;padding:3px 14px;border:3px solid #0f8a56;border-radius:9px;
+ display:inline-block;font-weight:900;font-size:1.08em;color:#0a6a3f;background:#dcf5e7;
+ direction:ltr;unicode-bidi:isolate;white-space:nowrap
+}
+.ans *{color:inherit}
+.dv-ans{direction:ltr;unicode-bidi:isolate}
+.method-used{margin:6px 0 10px;padding:7px 10px;border:1px dashed #7ea8d3;border-radius:8px;background:#f3f8fd;color:#173f82;font-size:14px;direction:rtl;text-align:right;line-height:1.7}
+.sec{font-weight:900;margin-top:9px}.step{margin:0}.sol-h{margin-top:8px}
+.paper-placeholder{
+ min-height:620px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+ text-align:center;color:#2164c0;font-family:Tahoma,"Noto Naskh Arabic",sans-serif
+}
+.paper-placeholder .pen{font-size:70px;line-height:1}.paper-placeholder .main{font-size:20px;font-weight:800}
+.paper-placeholder .sub{font-size:18px}
+.footer{
+ margin-top:14px;padding:11px;text-align:center;border-radius:13px;
+ background:linear-gradient(135deg,#0d3f8d,#1767d7);color:#fff;font-size:18px;font-weight:900
+}
+@media(max-width:1100px){
+ .dashboard{grid-template-columns:320px 1fr}.solution-column{grid-column:1/-1}
+}
+@media(max-width:760px){
+ .header-inner{grid-template-columns:1fr;padding:11px 13px}.brand-side{display:none}
+ .header-title h1{font-size:27px}.header-title .badge{font-size:16px}
+ .wrap{padding:10px}.dashboard{display:flex;flex-direction:column}
+ .solution-card{min-height:620px}.paper-wrap{min-height:560px}
+ .paper{font-size:16px;padding-right:57px}
+}
+.card[hidden]{display:none}
+.qtext{font-size:15px;line-height:2;font-weight:600}
+.qreqs{margin-top:8px;padding-top:8px;border-top:1px dashed #c9d3e0}.qreqs ol{margin:4px 0 0;padding-right:22px}.qreqs li{margin:2px 0}
+.paper .qtext{margin:6px 0 10px;font-size:inherit}
+
+/* ===== واجهة الترحيب ===== */
+.splash{
+  position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;
+  padding:max(20px,env(safe-area-inset-top)) 20px max(20px,env(safe-area-inset-bottom));
+  background:
+    radial-gradient(circle at 15% 20%,rgba(255,196,64,.16),transparent 32%),
+    radial-gradient(circle at 85% 80%,rgba(0,214,190,.18),transparent 34%),
+    linear-gradient(160deg,#071a3d 0%,#0d3f8d 55%,#1362c9 100%);
+  color:#fff;overflow:auto;transition:opacity .6s ease,visibility .6s ease
+}
+.splash.out{opacity:0;visibility:hidden}
+.splash-box{width:100%;max-width:640px;text-align:center;font-family:"Cairo",Tahoma,"Segoe UI",Arial,sans-serif}
+.sp-art{width:min(300px,70%);height:auto;margin:0 auto 6px;display:block}
+.sp-art .plate{fill:#ffd166}
+.sp-art .field{stroke:#5eead4;stroke-width:3;stroke-linecap:round;stroke-dasharray:6 10;animation:flow 1.6s linear infinite}
+.sp-art .pos{fill:#ffd166;font:900 22px Arial,sans-serif}
+.sp-art .neg{fill:#5eead4;font:900 24px Arial,sans-serif}
+.sp-art .wire{stroke:#9cc9ff;stroke-width:4;fill:none;stroke-linecap:round}
+.sp-art .wire path{stroke:#4d7fc4;stroke-width:4;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.sp-art .flow-wire path{stroke:#5eead4;stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:3 14;animation:flow 1.4s linear infinite}
+.sp-art .dot{fill:#9cc9ff}
+.sp-art .lbl{fill:#fff;font:900 17px Arial,sans-serif}
+.sp-art{width:min(340px,80%)}
+@keyframes flow{to{stroke-dashoffset:-32}}
+.sp-kicker{font-size:19px;font-weight:800;color:#9fd4ff;margin:0 0 4px}
+.sp-title{
+  margin:0;font-family:"Lalezar","Cairo",Tahoma,sans-serif;font-weight:400;
+  font-size:clamp(46px,13vw,84px);line-height:1.15;color:#fff;
+  text-shadow:0 4px 0 #0a2c66,0 10px 30px rgba(0,0,0,.35)
+}
+.sp-sub{
+  display:inline-block;margin:10px 0 22px;padding:6px 26px;border-radius:999px;
+  background:#91d2ff;color:#0d2f66;font-size:clamp(16px,4.4vw,20px);font-weight:900
+}
+.sp-credit{
+  margin:0 auto 26px;padding:16px 18px;max-width:460px;border-radius:18px;
+  border:2px solid #ffd166;background:rgba(255,209,102,.1)
+}
+.sp-credit small{display:block;font-size:17px;font-weight:800;color:#ffe29a;margin-bottom:2px}
+.sp-credit strong{
+  display:block;font-family:"Lalezar","Cairo",Tahoma,sans-serif;font-weight:400;
+  font-size:clamp(30px,8.5vw,46px);line-height:1.3;color:#ffd166;text-shadow:0 2px 12px rgba(255,209,102,.35)
+}
+.sp-btn{
+  border:0;cursor:pointer;font-family:inherit;font-size:clamp(22px,6vw,28px);font-weight:900;
+  padding:14px 54px;border-radius:999px;color:#0a2c66;
+  background:linear-gradient(135deg,#ffd166,#ffb020);box-shadow:0 8px 0 #c98400,0 14px 30px rgba(0,0,0,.35);
+  transition:transform .12s,box-shadow .12s
+}
+.sp-btn:hover{transform:translateY(-2px)}
+.sp-btn:active{transform:translateY(6px);box-shadow:0 2px 0 #c98400,0 6px 14px rgba(0,0,0,.35)}
+.sp-btn:focus-visible{outline:4px solid #fff;outline-offset:4px}
+@media(prefers-reduced-motion:reduce){.sp-art .flow-wire path{animation:none}.splash{transition:none}}
+body.splash-open{overflow:hidden}
+
+/* ===== شريط الحقوق (أعلى وأسفل المحاكي) ===== */
+.credit-bar{
+  text-align:center;padding:8px 14px;font-weight:900;font-size:17px;line-height:1.5;
+  color:#ffd166;background:linear-gradient(135deg,#071a3d,#0d3f8d);
+  letter-spacing:.2px
+}
+.credit-bar b{color:#fff;font-size:19px}
+.credit-bar.top{padding-top:max(8px,env(safe-area-inset-top));border-bottom:2px solid #ffd166}
+.credit-bar.bottom{margin-top:14px;border-radius:13px;border-top:2px solid #ffd166;padding:12px 14px}
+@media(max-width:760px){.credit-bar{font-size:15px}.credit-bar b{font-size:16px}}
+
+/* ===== تكبير رسم الواجهة الأولى ===== */
+.sp-art{width:min(520px,96%);margin-bottom:10px}
+.sp-art .lbl{font-size:19px}
+.sp-art .pos{font-size:24px}.sp-art .neg{font-size:26px}
+.splash-box{max-width:680px}
+
+/* ===== أزرار الحل (طباعة / صورة / نسخ) ===== */
+.solution-card .card-head .tools{margin-inline-start:auto;display:flex;gap:6px;flex-wrap:wrap}
+.tbtn{
+  min-height:38px;padding:4px 12px;border:1px solid rgba(255,255,255,.6);border-radius:10px;
+  background:rgba(255,255,255,.16);color:#fff;font:800 14px Tahoma,"Segoe UI",Arial,sans-serif;cursor:pointer;
+  display:inline-flex;align-items:center;gap:5px;white-space:nowrap
+}
+.tbtn:hover:not(:disabled){background:rgba(255,255,255,.3)}
+.tbtn:disabled{opacity:.4;cursor:not-allowed}
+.tbtn:focus-visible,.reset-btn:focus-visible,.fab button:focus-visible{outline:3px solid #ffd166;outline-offset:2px}
+.reset-btn{
+  width:100%;margin-top:8px;min-height:40px;border:1px solid #c4d9eb;border-radius:11px;background:#fff;
+  color:#245a9f;font:800 15px Tahoma,"Segoe UI",Arial,sans-serif;cursor:pointer
+}
+.reset-btn:hover{background:#f0f7ff}
+.save-note{margin-top:8px;text-align:center;font-size:13px;color:#5a7290}
+
+/* ===== إشعار صغير ===== */
+.toast{
+  position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);z-index:10000;
+  max-width:88vw;padding:11px 18px;border-radius:12px;background:#0d2f66;color:#fff;
+  font:800 15px/1.5 Tahoma,"Segoe UI",Arial,sans-serif;text-align:center;
+  box-shadow:0 8px 24px rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:opacity .25s,transform .25s
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ===== شريط الجوال الثابت ===== */
+.fab{display:none}
+.fab[hidden]{display:none!important}
+
+/* ===== الجوال والشاشات اللمسية: حجم لمس 44px وخط 16px ===== */
+@media(max-width:760px),(pointer:coarse){
+  input[type=number],select{font-size:16px;min-height:44px;padding:8px 10px}
+  .unit-row{grid-template-columns:1fr 100px}
+  .unit-row select{font-size:16px}
+  .vals label{font-size:16px}
+  .req{min-height:48px;align-items:center;padding:9px 10px;font-size:15px}
+  .req input{width:24px;height:24px;margin-top:0;flex:none}
+  .series-method label{min-height:48px;align-items:center;padding:10px}
+  .series-method input{width:22px;height:22px;margin-top:0;flex:none}
+  .solve{min-height:52px;font-size:20px}
+  .reset-btn{min-height:46px}
+  .tbtn{min-height:44px;padding:4px 13px;font-size:15px}
+}
+@media(max-width:760px){
+  .fab:not([hidden]){
+    display:flex;position:fixed;left:10px;right:10px;bottom:max(10px,env(safe-area-inset-bottom));z-index:900;gap:10px
+  }
+  .fab button{
+    flex:1;min-height:52px;border-radius:14px;border:2px solid #1767d7;cursor:pointer;
+    font:900 16px Tahoma,"Segoe UI",Arial,sans-serif;box-shadow:0 6px 18px rgba(8,30,80,.35)
+  }
+  #fabGo{background:linear-gradient(135deg,#1767d7,#3187e9);color:#fff}
+  #fabCopy{background:#fff;color:#0c438f}
+  body.has-fab{padding-bottom:calc(80px + env(safe-area-inset-bottom))}
+  .toast{bottom:calc(84px + env(safe-area-inset-bottom))}
+  .solution-card .card-head{flex-wrap:wrap;row-gap:8px}
+  .solution-card .card-head .tools{width:100%;margin-inline-start:0}
+  .solution-card .card-head .tools .tbtn{flex:1;justify-content:center}
+  .sp-title{font-size:clamp(44px,14vw,70px)}
+}
+
+/* ===== الطباعة ===== */
+@page{size:A4;margin:12mm}
+@media print{
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{background:#fff!important;padding:0!important}
+  .splash,.header,.footer,.fab,.toast,.tools,.dashboard>.column:not(.solution-column){display:none!important}
+  .dashboard{display:block!important}
+  .wrap{padding:0!important;max-width:none!important}
+  .solution-card{min-height:0!important;height:auto!important;box-shadow:none!important;border:0!important;overflow:visible!important}
+  .solution-card .card-head{background:none!important;color:#123e78!important;border-bottom:2px solid #123e78!important}
+  .paper-wrap{height:auto!important;min-height:0!important;overflow:visible!important;background:#fff!important}
+  .paper{min-height:0!important}
+  .paper-placeholder{display:none!important}
+  .eq,.sec,.step,.ans,.phead{break-inside:avoid}
+  .credit-bar.top{border-radius:0}
+  .credit-bar.bottom{margin-top:10px}
+}
+
+/* ===== نافذة النتيجة (احتياط إذا المتصفح منع الطباعة/النسخ/التنزيل) ===== */
+.tbtn.is-off{opacity:.6}
+.modal{position:fixed;inset:0;z-index:10001;display:flex;align-items:center;justify-content:center;padding:14px;background:rgba(6,20,50,.72)}
+.modal[hidden]{display:none}
+.modal-box{
+  width:100%;max-width:560px;max-height:92vh;overflow:auto;background:#fff;color:#143c78;border-radius:16px;
+  padding:14px 16px 16px;box-shadow:0 20px 50px rgba(0,0,0,.45);font-family:Tahoma,"Segoe UI",Arial,sans-serif
+}
+.modal-head{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:19px;font-weight:900}
+.modal-head button{min-width:44px;min-height:44px;border:0;border-radius:10px;background:#eef4fb;color:#143c78;font-size:20px;cursor:pointer}
+.modal-msg{margin:6px 0 10px;font-size:15px;line-height:1.7;color:#35557e}
+.modal-body img{display:block;width:100%;max-height:52vh;object-fit:contain;border:1px solid #cfe0ef;border-radius:10px;background:#fff}
+.modal-body textarea{width:100%;height:220px;padding:10px;border:1px solid #c4d9eb;border-radius:10px;font:15px/1.7 Tahoma,Arial,sans-serif;direction:rtl;resize:vertical}
+.modal-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.modal-actions button{
+  flex:1 1 140px;min-height:48px;border:2px solid #1767d7;border-radius:12px;background:#fff;color:#0c438f;
+  font:900 16px Tahoma,"Segoe UI",Arial,sans-serif;cursor:pointer
+}
+.modal-actions button.primary{background:linear-gradient(135deg,#1767d7,#3187e9);color:#fff}
+@media print{.modal{display:none!important}}
+.capturing .solution-card{min-height:0!important;height:auto!important}
+.capturing .paper-wrap{height:auto!important;min-height:0!important;overflow:visible!important}
+.capturing .paper{min-height:0!important}
+.q-inside{border-bottom:1px solid #e3e9f2}
+.q-label{font-weight:800;font-size:14px;margin-bottom:8px;color:#16233b}
+.circuit-pick{border-bottom:1px solid #e3e9f2}
+</style>
+</head>
+<body>
+
+<div class="splash" id="splash" role="dialog" aria-label="واجهة البداية">
+  <div class="splash-box">
+    <svg class="sp-art" viewBox="6 4 306 148" aria-hidden="true">
+      <g class="wire">
+        <path d="M30 28V76M30 90V138H260"/>
+        <path d="M30 28H88M102 28H260"/>
+        <path d="M190 28V74M190 90V138"/>
+        <path d="M260 28V74M260 90V138"/>
+      </g>
+      <g class="flow-wire">
+        <path d="M30 28V76M30 90V138H260"/>
+        <path d="M30 28H88M102 28H260"/>
+        <path d="M190 28V74M190 90V138"/>
+        <path d="M260 28V74M260 90V138"/>
+      </g>
+      <rect class="plate" x="11" y="74" width="38" height="6" rx="3"/>
+      <rect class="plate" x="20" y="87" width="20" height="6" rx="3"/>
+      <text class="pos" x="60" y="82">+</text>
+      <text class="neg" x="60" y="104">−</text>
+      <rect class="plate" x="87" y="10" width="6" height="36" rx="3"/>
+      <rect class="plate" x="97" y="10" width="6" height="36" rx="3"/>
+      <rect class="plate" x="174" y="73" width="32" height="6" rx="3"/>
+      <rect class="plate" x="174" y="85" width="32" height="6" rx="3"/>
+      <rect class="plate" x="244" y="73" width="32" height="6" rx="3"/>
+      <rect class="plate" x="244" y="85" width="32" height="6" rx="3"/>
+      <circle class="dot" cx="190" cy="28" r="5"/><circle class="dot" cx="190" cy="138" r="5"/>
+      <circle class="dot" cx="260" cy="28" r="5"/><circle class="dot" cx="260" cy="138" r="5"/>
+      <text class="lbl" x="95" y="66" text-anchor="middle">C₁</text>
+      <text class="lbl" x="226" y="86" text-anchor="middle">C₂</text>
+      <text class="lbl" x="296" y="86" text-anchor="middle">C₃</text>
+    </svg>
+    <p class="sp-kicker">مرحبًا بك في</p>
+    <h1 class="sp-title">محاكي الربط المختلط</h1>
+    <div class="sp-sub">ربط مختلط — السادس الإعدادي</div>
+    <div class="sp-credit">
+      <small>الحقوق محفوظة</small>
+      <strong>الأستاذ علي عبدالستار</strong>
+    </div>
+    <button class="sp-btn" id="startBtn" type="button">ابدأ المحاكي</button>
+  </div>
+</div>
+<div class="credit-bar top">الحقوق محفوظة © &nbsp;<b>الأستاذ علي عبدالستار</b></div>
+<header class="header">
+  <div class="header-inner">
+    <div class="brand-side">⚛️ مختبر الفيزياء التفاعلي</div>
+    <div class="header-title">
+      <h1>محاكي الربط المختلط</h1>
+      <div class="badge" id="headerBadge">الدائرة رقم (1)</div>
+    </div>
+    <div class="brand-side right">تعلم .. جرب .. اكتشف 🎓</div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="dashboard">
+
+    <aside class="column left-column">
+      <div class="card">
+        <div class="card-head"><span>طريقة حساب التوالي</span><span class="head-icon">∑</span></div>
+        <div class="card-body">
+          <div class="series-method">
+            <label><input type="radio" name="seriesMethod" value="reciprocal" checked>
+              <span><b>قانون الكتاب:</b> 1/C<sub>eq</sub> = 1/C<sub>1</sub> + 1/C<sub>2</sub></span></label>
+            <label><input type="radio" name="seriesMethod" value="product">
+              <span><b>القانون الآخر:</b> C<sub>eq</sub> = (C<sub>1</sub> × C<sub>2</sub>) / (C<sub>1</sub> + C<sub>2</sub>)</span></label>
+          </div>
+          <div class="method-note">هذا الاختيار يطبق على جميع الدوائر وعلى كل خطوة توالي داخل الحل.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><span>قيم العناصر</span><span class="head-icon">☷</span></div>
+        <div class="card-body"><div class="vals" id="vals"></div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><span>اختر المطاليب</span><span class="head-icon">☑️</span></div>
+        <div class="card-body">
+          <div class="reqs" id="reqs"></div>
+          <button class="solve" id="solveBtn" type="button">▶ &nbsp; احسب</button>
+          <button class="reset-btn" id="resetBtn" type="button">↺ إرجاع القيم الافتراضية</button>
+          <div class="save-note">💾 تُحفظ آخر إعداداتك تلقائيًا على هذا الجهاز</div>
+          <div id="err"></div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="column center-column">
+      <div class="card">
+        <div class="card-head"><span id="previewTitle">الدائرة رقم (1)</span><span class="head-icon">🔌</span></div>
+        <div class="card-body circuit-pick">
+          <div class="q-label">⚙️ اختر الدائرة</div>
+          <select id="circuit" aria-label="اختر الدائرة"></select>
+        </div>
+        <div class="card-body q-inside" id="qCard" hidden>
+          <div class="q-label">❓ نص السؤال</div>
+          <div class="qtext" id="qText"></div>
+        </div>
+        <div class="circuit-stage"><div id="preview" class="preview"></div>
+          <div class="circuit-legend" aria-label="ألوان عناصر الدائرة">
+            <span><i class="lg c1"></i>C₁</span>
+            <span><i class="lg c2"></i>C₂</span>
+            <span><i class="lg c3"></i>C₃</span>
+            <span><i class="lg c4"></i>C₄</span>
+            <span><i class="lg c5"></i>C₅</span>
+            <span><i class="lg vv"></i>V</span>
+          </div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><span>💡 معلومات الدائرة</span></div>
+        <div class="card-body">
+          <table class="info-table">
+            <tr><td class="c1">C₁</td><td id="infoC1">—</td></tr>
+            <tr><td class="c2">C₂</td><td id="infoC2">—</td></tr>
+            <tr><td class="c3">C₃</td><td id="infoC3">—</td></tr>
+            <tr><td class="c4">C₄</td><td id="infoC4">—</td></tr>
+            <tr><td class="c5">C₅</td><td id="infoC5">—</td></tr>
+            <tr><td class="v">V</td><td id="infoV">—</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <div class="note"><b>ⓘ ملاحظة</b><br>
+            يمكنك اختيار أكثر من مطلب واحد، وسيظهر الحل خطوة بخطوة.
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <section class="column solution-column">
+      <div class="card solution-card">
+        <div class="card-head"><span>📄</span><span>الحل</span>
+          <span class="tools">
+            <button class="tbtn" id="btnPrint" type="button" aria-label="طباعة الحل">🖨️ <span>طباعة</span></button>
+            <button class="tbtn" id="btnShot" type="button" aria-label="حفظ الحل كصورة">🖼️ <span>صورة</span></button>
+            <button class="tbtn" id="btnPdf" type="button" aria-label="حفظ الحل كملف PDF">📄 <span>PDF</span></button>
+            <button class="tbtn" id="btnCopy" type="button" aria-label="نسخ الحل">📋 <span>نسخ</span></button>
+            <button class="tbtn" id="btnShare" type="button" aria-label="مشاركة الشاشة">📤 <span>مشاركة</span></button>
+          </span>
+        </div>
+        <div class="paper-wrap" id="paperWrap">
+          <div class="paper" id="paper">
+            <div class="paper-placeholder">
+              <div class="pen">✎</div>
+              <div class="main">اختر أحد المطاليب واضغط على</div>
+              <div class="sub">احسب لعرض الحل هنا</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+  <div class="footer">⚛️ &nbsp; الفيزياء ... أسهل مما تتخيل &nbsp; ⚛️</div>
+  <div class="credit-bar bottom">جميع الحقوق محفوظة © &nbsp;<b>الأستاذ علي عبدالستار</b></div>
+</div>
+<div class="fab" id="fab" hidden>
+  <button id="fabGo" type="button">⬇ انتقل للحل</button>
+  <button id="fabCopy" type="button">📋 نسخ الحل</button>
+  <button id="fabShare" type="button">📤 مشاركة</button>
+</div>
+<div class="modal" id="outModal" hidden role="dialog" aria-modal="true" aria-labelledby="mTitle">
+  <div class="modal-box">
+    <div class="modal-head"><span id="mTitle"></span><button id="mClose" type="button" aria-label="إغلاق">✕</button></div>
+    <p class="modal-msg" id="mMsg"></p>
+    <div class="modal-body" id="mBody"></div>
+    <div class="modal-actions" id="mActs"></div>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+/* ============ أدوات مساعدة ============ */
+const $ = id => document.getElementById(id);
+const r4 = x => Math.round(x*10000)/10000;
+const exact = x => Math.abs(r4(x)-x) < 1e-9;
+const n = x => String(r4(x));
+const vv = x => (exact(x) ? '' : '≈ ') + n(x);           // القيمة النهائية (تقريب إذا لزم)
+const fr = (a,b) => `<span class="fr"><span>${a}</span><span>${b}</span></span>`;
+const S = (name,i) => name + '<sub>' + i + '</sub>';
+const eq = html => `<div class="eq">${html}</div>`;
+let seriesMethod = 'reciprocal';
+const ser2 = (a,b,method=seriesMethod) => method === 'product' ? (a*b)/(a+b) : 1/(1/a + 1/b);
+const seriesMethodName = () => seriesMethod === 'product' ? 'C<sub>eq</sub> = (C<sub>1</sub> × C<sub>2</sub>) / (C<sub>1</sub> + C<sub>2</sub>)' : '1/C<sub>eq</sub> = 1/C<sub>1</sub> + 1/C<sub>2</sub>';
+
+/* ============ الدوائر ============
+   كل دائرة: الاسم، الحقول، المطاليب، الرسم، الحل.
+   لإضافة دائرة جديدة: أضف عنصرًا جديدًا في المصفوفة CIRCUITS.
+*/
+const gcd = (a,b) => b ? gcd(b, a % b) : Math.abs(a);
+
+const CIRCUITS = [
+{
+  id:'c1',
+  name:'الدائرة رقم (1)',
+  fields:[
+    {k:'C1', label:S('C',1), u:'μF', units:'cap', d:20},
+    {k:'C2', label:S('C',2), u:'μF', units:'cap', d:30},
+    {k:'C3', label:S('C',3), u:'μF', units:'cap', d:18},
+    {k:'V',  label:'ΔV',    u:'V',  units:'volt', d:12}
+  ],
+  reqs:[
+    {id:'ceq', text:'السعة المكافئة للمجموعة ' + S('C','eq')},
+    {id:'qt',  text:'الشحنة الكلية المختزنة في المجموعة ' + S('Q','total')},
+    {id:'qs',  text:'الشحنة المختزنة في أي من صفيحتي كل متسعة'},
+    {id:'dv1', text:'فرق الجهد بين صفحتي المتسعة ' + S('C',1)},
+    {id:'dv2', text:'فرق الجهد بين صفحتي المتسعة ' + S('C',2)},
+    {id:'dv3', text:'فرق الجهد بين صفحتي المتسعة ' + S('C',3)}
+  ],
+
+  /* ---------- الرسم ---------- */
+  svg(v){
+    const ink='#16233b';
+    const wire='stroke="#52657d" stroke-width="3.5" stroke-linecap="round"';
+    const c1='#e34b3f', c2='#15946b', c3='#2d6fd0', batt='#6942bb';
+    const hcap=(x,y,color)=>`<line x1="${x-20}" y1="${y-6}" x2="${x+20}" y2="${y-6}" stroke="${color}" stroke-width="4" stroke-linecap="round"/><line x1="${x-20}" y1="${y+6}" x2="${x+20}" y2="${y+6}" stroke="${color}" stroke-width="4" stroke-linecap="round"/>`;
+    const lab=(x,y,i,val,anchor,color)=>`<text x="${x}" y="${y}" text-anchor="${anchor}" font-size="16" fill="${color}" direction="ltr" font-weight="800">C<tspan font-size="11" dy="4">${i}</tspan><tspan dy="-4"> = ${val} ${getUnit('C'+i)}</tspan></text>`;
+    let s='<svg viewBox="0 0 520 330" role="img" aria-label="رسم الدائرة" xmlns="http://www.w3.org/2000/svg">';
+    s+=`<path ${wire} fill="none" d="M110 50H440 M110 280H440 M110 50V158 M110 172V280 M270 50V99 M270 111V209 M270 221V280 M440 50V159 M440 171V280"/>`;
+    s+=hcap(270,105,c1)+hcap(270,215,c2)+hcap(440,165,c3);
+    // البطارية: الصفيحة الطويلة (+) فوق
+    s+=`<line x1="88" y1="158" x2="132" y2="158" stroke="${batt}" stroke-width="4" stroke-linecap="round"/><line x1="98" y1="172" x2="122" y2="172" stroke="${batt}" stroke-width="6" stroke-linecap="round"/>`;
+    s+=`<text x="76" y="156" font-size="18" fill="${batt}" text-anchor="middle" font-weight="900">+</text><text x="76" y="188" font-size="20" fill="${batt}" text-anchor="middle" font-weight="900">−</text>`;
+    [[270,50],[270,280]].forEach(p=>{s+=`<circle cx="${p[0]}" cy="${p[1]}" r="4.5" fill="${ink}"/>`});
+    s+=lab(244,110,1,displayValue('C1',v.C1),'end',c1)+lab(244,220,2,displayValue('C2',v.C2),'end',c2)+lab(414,170,3,displayValue('C3',v.C3),'end',c3);
+    s+=`<text x="140" y="172" font-size="16" fill="${batt}" direction="ltr" font-weight="800">ΔV = ${displayValue('V',v.V)} ${getUnit('V')}</text>`;
+    s+='</svg>';
+    return s;
+  },
+
+  /* ---------- الحل (بأسلوب الكتاب) ---------- */
+  solve(v, sel, method=seriesMethod){
+    const {C1,C2,C3,V} = v;
+    const Cp = ser2(C1,C2,method), Ceq = Cp + C3, Qt = Ceq*V, Qp = Cp*V, Q3 = C3*V;
+    const c = i => S('C',i), cp = S('C','12'), ceqS = S('C','eq');
+    let cpShown = false; let k = 0;
+
+    // السعة المكافئة لمجموعة التوالي (C1 , C2)
+    const cpSteps = () => {
+      cpShown = true;
+      let h = `<p class="step">نحسب السعة المكافئة ${cp} للمتسعتين (${c(1)} ، ${c(2)}) المربوطتين على <b>التوالي</b> مع بعضهما:</p>`;
+      if(method === 'product'){
+        h += eq(`${cp} = ${fr(c(1) + ' × ' + c(2), c(1) + ' + ' + c(2))}`);
+        h += eq(`${cp} = ${fr(n(C1) + ' × ' + n(C2), n(C1) + ' + ' + n(C2))} = ${vv(Cp)} μF`);
+      }else{
+        h += eq(`${fr('1', cp)} = ${fr('1', c(1))} + ${fr('1', c(2))}`);
+        h += eq(`${fr('1', cp)} = ${fr('1', n(C1))} + ${fr('1', n(C2))} = ${fr(n(C1+C2), n(C1*C2))}`);
+        h += eq(`${cp} = ${fr('1', fr(n(C1+C2), n(C1*C2)))}`)+eq(`${cp} = ${fr(n(C1*C2), n(C1+C2))} = ${vv(Cp)} μF`);
+      }
+      h += `<p class="step">فيكون مقدار السعة المكافئة لمجموعة التوالي:</p>`;
+      h += eq(`${cp} = ${vv(Cp)} μF`);
+      return h;
+    };
+    // السعة المكافئة الكلية (التوازي)
+    const ceqSteps = () =>
+      `<p class="step">ثم نحسب السعة المكافئة الكلية (${ceqS}) لمجموعة التوازي (${cp} ، ${c(3)}) وهي السعة الكلية للمجموعة:</p>` +
+      eq(`${ceqS} = ${cp} + ${c(3)}`) +
+      eq(`${ceqS} = ${n(Cp)} + ${n(C3)} = ${vv(Ceq)} μF`);
+
+    let h = '';
+    if(sel.has('ceq')){
+      h += `<div class="sec">${++k}) السعة المكافئة للمجموعة:</div>` + cpSteps() + ceqSteps();
+      h += `<div class="ans">${ceqS} = <span dir="ltr">${vv(Ceq)} μF</span></div>`;
+    }
+    if(sel.has('qt')){
+      h += `<div class="sec">${++k}) الشحنة الكلية المختزنة في المجموعة:</div>`;
+      if(!sel.has('ceq')){
+        h += `<p class="step">نحتاج أولًا إلى السعة المكافئة للمجموعة:</p>` + cpSteps() + ceqSteps();
+      }
+      h += `<p class="step">لحساب الشحنة الكلية للمجموعة نطبق العلاقة التالية:</p>` +
+        eq(`${S('Q','total')} = ${ceqS} × ΔV`) +
+        eq(`${S('Q','total')} = ${n(Ceq)} × ${n(V)} = ${vv(Qt)} μC`);
+      h += `<div class="ans">${S('Q','total')} = <span dir="ltr">${vv(Qt)} μC</span></div>`;
+    }
+    if(sel.has('qs')){
+      h += `<div class="sec">${++k}) الشحنة المختزنة في أي من صفيحتي كل متسعة:</div>`;
+      if(!cpShown){
+        h += `<p class="step">نحتاج أولًا إلى السعة المكافئة لمجموعة التوالي:</p>` + cpSteps();
+      }
+      h += `<p class="step">مجموعة التوازي (${cp} ، ${c(3)}) فرق الجهد على كل منهما يساوي فرق الجهد الكلي:</p>` +
+        eq(`ΔV<sub>12</sub> = ΔV<sub>3</sub> = ΔV<sub>total</sub> = ${n(V)} V`) +
+        `<p class="step">ثم نحسب شحنة كل منهما (والمتسعتان ${c(1)} و ${c(2)} على التوالي فشحنتهما متساوية وتساوي شحنة ${cp}):</p>` +
+        eq(`Q<sub>12</sub> = ${cp} × ΔV<sub>12</sub> = ${n(Cp)} × ${n(V)} = ${vv(Qp)} μC = ${S('Q',1)} = ${S('Q',2)}`) +
+        eq(`${S('Q',3)} = ${c(3)} × ΔV<sub>3</sub> = ${n(C3)} × ${n(V)} = ${vv(Q3)} μC`);
+      h += `<div class="ans">${S('Q',1)} = ${S('Q',2)} = <span dir="ltr">${vv(Qp)} μC</span> ، ${S('Q',3)} = <span dir="ltr">${vv(Q3)} μC</span></div>`;
+    }
+    if(sel.has('dv1')){
+      h += `<div class="sec">${++k}) فرق الجهد بين صفحتي المتسعة ${c(1)}:</div>`;
+      if(!cpShown){
+        h += `<p class="step">نحتاج أولًا إلى حساب السعة المكافئة لمجموعتي التوالي:</p>` + cpSteps();
+      }
+      h += `<p class="step">بما أن المتسعتين ${c(1)} و${c(2)} مربوطتان على التوالي، فإن الشحنة المختزنة عليهما متساوية:</p>` +
+        eq(`${S('Q',1)} = ${S('Q',2)} = ${vv(Qp)} μC`) +
+        `<p class="step">نحسب فرق الجهد بين صفحتي ${c(1)} من العلاقة:</p>` +
+        eq(`ΔV<sub>1</sub> = ${fr(S('Q',1),c(1))}`) +
+        eq(`ΔV<sub>1</sub> = ${fr(n(Qp),n(C1))} = ${vv(Qp/C1)} V`);
+      h += `<div class="ans dv-ans" dir="ltr">ΔV₁ = ${vv((Qp/C1)/UNIT_FACTORS.volt[getUnit('V')])} ${getUnit('V')}</div>`;
+    }
+
+    if(sel.has('dv2')){
+      h += `<div class="sec">${++k}) فرق الجهد بين صفحتي المتسعة ${c(2)}:</div>`;
+      if(!cpShown){
+        h += `<p class="step">نحتاج أولًا إلى حساب السعة المكافئة لمجموعتي التوالي:</p>` + cpSteps();
+      }
+      h += `<p class="step">بما أن المتسعتين ${c(1)} و${c(2)} مربوطتان على التوالي، فإن الشحنة المختزنة عليهما متساوية:</p>` +
+        eq(`${S('Q',1)} = ${S('Q',2)} = ${vv(Qp)} μC`) +
+        `<p class="step">نحسب فرق الجهد بين صفحتي ${c(2)} من العلاقة:</p>` +
+        eq(`ΔV<sub>2</sub> = ${fr(S('Q',2),c(2))}`) +
+        eq(`ΔV<sub>2</sub> = ${fr(n(Qp),n(C2))} = ${vv(Qp/C2)} V`);
+      h += `<div class="ans dv-ans" dir="ltr">ΔV₂ = ${vv((Qp/C2)/UNIT_FACTORS.volt[getUnit('V')])} ${getUnit('V')}</div>`;
+    }
+
+    if(sel.has('dv3')){
+      h += `<div class="sec">${++k}) فرق الجهد بين صفحتي المتسعة ${c(3)}:</div>`;
+      h += `<p class="step">المتسعة ${c(3)} مربوطة على التوازي مع مجموعة المتسعتين ${c(1)} و${c(2)}، لذلك يكون فرق الجهد عليها مساويًا لفرق الجهد الكلي:</p>` +
+        eq(`ΔV<sub>3</sub> = ΔV<sub>total</sub> = ${displayValue('V',V)} ${getUnit('V')}`);
+      h += `<div class="ans dv-ans" dir="ltr">ΔV₃ = ${displayValue('V',V)} ${getUnit('V')}</div>`;
+    }
+
+    return h;
+  }
+},
+{
+  id:'c2',
+  name:'الدائرة رقم (2)',
+  fields:[
+    {k:'C1', label:S('C',1), u:'μF', units:'cap', d:6},
+    {k:'C2', label:S('C',2), u:'μF', units:'cap', d:3},
+    {k:'C3', label:S('C',3), u:'μF', units:'cap', d:2},
+    {k:'C4', label:S('C',4), u:'μF', units:'cap', d:4},
+    {k:'V',  label:'ΔV',    u:'V',  units:'volt', d:40}
+  ],
+  reqs:[
+    {id:'ceq', text:'السعة المكافئة للمجموعة ' + S('C','eq')},
+    {id:'qs',  text:'الشحنة المختزنة في أي من صفيحتي كل متسعة'},
+    {id:'energy1', text:'الطاقة المختزنة في المجال الكهربائي بين صفحتي المتسعة ' + S('C',1)},
+    {id:'energy2', text:'الطاقة المختزنة في المجال الكهربائي بين صفحتي المتسعة ' + S('C',2)},
+    {id:'energy3', text:'الطاقة المختزنة في المجال الكهربائي بين صفحتي المتسعة ' + S('C',3)},
+    {id:'energy4', text:'الطاقة المختزنة في المجال الكهربائي بين صفحتي المتسعة ' + S('C',4)}
+  ],
+
+  /* ---------- الرسم ---------- */
+  svg(v){
+    const wire='stroke="#52657d" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"';
+    const c1='#e34b3f', c2='#15946b', c3='#2d6fd0', c4='#e08a2e', batt='#6942bb';
+    // متسعة على سلك أفقي: صفيحتان عموديتان (نصف الفتحة 12 ونصف الارتفاع 28)
+    const hcap=(x,y,color)=>`<line x1="${x-12}" y1="${y-28}" x2="${x-12}" y2="${y+28}" stroke="${color}" stroke-width="4" stroke-linecap="round"/><line x1="${x+12}" y1="${y-28}" x2="${x+12}" y2="${y+28}" stroke="${color}" stroke-width="4" stroke-linecap="round"/>`;
+    const lab=(x,y,i,val,anchor,color)=>`<text x="${x}" y="${y}" text-anchor="${anchor}" font-size="15" fill="${color}" direction="ltr" font-weight="800">C<tspan font-size="10" dy="4">${i}</tspan><tspan dy="-4"> = ${val} ${getUnit('C'+i)}</tspan></text>`;
+    let s='<svg viewBox="0 0 620 450" role="img" aria-label="رسم الدائرة الثانية" xmlns="http://www.w3.org/2000/svg">';
+
+    // مطابقة للشكل (41):
+    // مجموعة التوازي مستطيل: الفرع العلوي فيه C1 ثم C2 على التوالي، والفرع السفلي فيه C3.
+    // يخرج السلك من منتصف الضلع الأيسر إلى البطارية، ومن منتصف الضلع الأيمن إلى C4 ثم إلى البطارية.
+    s+=`<path ${wire} fill="none" d="M136 106 V226 M452 106 V226"/>`;
+    s+=`<path ${wire} fill="none" d="M136 106 H196 M220 106 H359 M383 106 H452"/>`;
+    s+=`<path ${wire} fill="none" d="M136 226 H283 M307 226 H452"/>`;
+    s+=hcap(208,106,c1)+hcap(371,106,c2)+hcap(295,226,c3);
+
+    // الأسلاك الخارجية و C4
+    s+=`<path ${wire} fill="none" d="M136 166 H66 V392 H284"/>`;
+    s+=`<path ${wire} fill="none" d="M452 166 H516 M540 166 H592 V392 H312"/>`;
+    s+=hcap(528,166,c4);
+
+    // البطارية في الأسفل: الصفيحة الطويلة (+) على اليسار
+    s+=`<line x1="284" y1="364" x2="284" y2="420" stroke="${batt}" stroke-width="4" stroke-linecap="round"/><line x1="312" y1="374" x2="312" y2="410" stroke="${batt}" stroke-width="6" stroke-linecap="round"/>`;
+
+    // التسميات
+    s+=lab(208,72,1,displayValue('C1',v.C1),'middle',c1);
+    s+=lab(371,72,2,displayValue('C2',v.C2),'middle',c2);
+    s+=lab(295,182,3,displayValue('C3',v.C3),'middle',c3);
+    s+=lab(528,126,4,displayValue('C4',v.C4),'middle',c4);
+    s+=`<text x="298" y="346" text-anchor="middle" font-size="16" fill="${batt}" direction="ltr" font-weight="800">ΔV = ${displayValue('V',v.V)} ${getUnit('V')}</text>`;
+    s+='</svg>';
+    return s;
+  },
+
+  /* ---------- الحل بأسلوب الكتاب: توالي ثم توازي ثم توالي ---------- */
+  solve(v, sel, method=seriesMethod){
+    const {C1,C2,C3,C4,V}=v;
+    const C12=ser2(C1,C2,method);
+    const C123=C12+C3;
+    const Ceq=ser2(C123,C4,method);
+    const Qt=Ceq*V;
+    const Vparallel=Qt/C123;
+    const Q4=Qt;
+    const Q3=C3*Vparallel;
+    const Q12=C12*Vparallel;
+    const Q1=Q12, Q2=Q12;
+    const V1=Q1/C1, V2=Q2/C2, V3=Q3/C3, V4=Q4/C4;
+    const E1=0.5*Q1*V1*1e-6, E2=0.5*Q2*V2*1e-6, E3=0.5*Q3*V3*1e-6, E4=0.5*Q4*V4*1e-6;
+    const c=i=>S('C',i), ceqS=S('C','eq');
+
+
+    const c12Steps=()=>
+      `<p class="step">نحسب السعة المكافئة للمتسعتين ${c(1)} و${c(2)} المربوطتين على <b>التوالي</b>:</p>`+
+      (method === 'product'
+        ? eq(`${S('C','12')} = ${fr(c(1) + ' × ' + c(2), c(1) + ' + ' + c(2))}`)+
+          eq(`${S('C','12')} = ${fr(n(C1) + ' × ' + n(C2), n(C1) + ' + ' + n(C2))} = ${vv(C12)} μF`)
+        : eq(`${fr('1',S('C','12'))} = ${fr('1',c(1))} + ${fr('1',c(2))}`)+
+          eq(`${fr('1',S('C','12'))} = ${fr('1',n(C1))} + ${fr('1',n(C2))} = ${fr(n(C1+C2),n(C1*C2))}`)+
+          eq(`${S('C','12')} = ${fr('1', fr(n(C1+C2), n(C1*C2)))}`)+eq(`${S('C','12')} = ${fr(n(C1*C2), n(C1+C2))} = ${vv(C12)} μF`))+
+      `<p class="step">إذن:</p>`+
+      eq(`${S('C','12')} = ${vv(C12)} μF`);
+
+    const parallelSteps=()=>
+      `<p class="step">المتسعة ${c(3)} مربوطة على <b>التوازي</b> مع مجموعة (${c(1)} ، ${c(2)}):</p>`+
+      eq(`${S('C','123')} = ${S('C','12')} + ${c(3)}`)+
+      eq(`${S('C','123')} = ${n(C12)} + ${n(C3)} = ${vv(C123)} μF`)+
+      `<p class="step">إذن:</p>`+
+      eq(`${S('C','123')} = ${vv(C123)} μF`);
+
+    const totalSteps=()=>
+      `<p class="step">ثم نحسب السعة المكافئة الكلية ${ceqS} للمتسعتين المكافئتين ${S('C','123')} و${c(4)} المربوطتين على <b>التوالي</b>:</p>`+
+      (method === 'product'
+        ? eq(`${ceqS} = ${fr(S('C','123') + ' × ' + c(4), S('C','123') + ' + ' + c(4))}`)+
+          eq(`${ceqS} = ${fr(n(C123) + ' × ' + n(C4), n(C123) + ' + ' + n(C4))} = ${vv(Ceq)} μF`)
+        : eq(`${fr('1',ceqS)} = ${fr('1',S('C','123'))} + ${fr('1',c(4))}`)+
+          eq(`${fr('1',ceqS)} = ${fr('1',n(C123))} + ${fr('1',n(C4))} = ${fr(n(C123+C4),n(C123*C4))}`)+
+          eq(`${ceqS} = ${fr('1', fr(n(C123+C4), n(C123*C4)))}`)+eq(`${ceqS} = ${fr(n(C123*C4), n(C123+C4))} = ${vv(Ceq)} μF`))+
+      `<p class="step">إذن:</p>`+
+      eq(`${ceqS} = ${vv(Ceq)} μF`);
+
+    let h=''; let k=0;
+    if(sel.has('ceq')){
+      h+=`<div class="sec">${++k}) السعة المكافئة للمجموعة:</div>`+c12Steps()+parallelSteps()+totalSteps();
+      h+=`<div class="ans">${ceqS} = <span dir="ltr">${vv(Ceq)} μF</span></div>`;
+    }
+
+    if(sel.has('qs')){
+      h+=`<div class="sec">${++k}) الشحنة المختزنة في أي من صفيحتي كل متسعة:</div>`;
+      h+=`<p class="step">أولًا نحسب الشحنة الكلية للمجموعة:</p>`+
+        eq(`${S('Q','total')} = ${ceqS} × ΔV = ${n(Ceq)} × ${n(V)} = ${vv(Qt)} μC`)+
+        `<p class="step">لأن ${S('C','123')} و${c(4)} مربوطتان على التوالي:</p>`+
+        eq(`${S('Q',4)} = ${S('Q','123')} = ${S('Q','total')} = ${vv(Qt)} μC`)+
+        `<p class="step">نحسب فرق الجهد على مجموعة التوازي:</p>`+
+        eq(`ΔV<sub>123</sub> = ${fr(S('Q','123'),S('C','123'))} = ${fr(n(Qt),n(C123))} = ${vv(Vparallel)} V`)+
+        `<p class="step">وبما أن ${c(3)} على التوازي مع مجموعة (${c(1)} ، ${c(2)}):</p>`+
+        eq(`${S('Q',3)} = ${c(3)} × ΔV<sub>123</sub> = ${n(C3)} × ${n(Vparallel)} = ${vv(Q3)} μC`)+
+        `<p class="step">والمتسعتان ${c(1)} و${c(2)} على التوالي، لذلك شحنتهما متساوية وتساوي شحنة مجموعة التوالي:</p>`+
+        eq(`${S('Q',1)} = ${S('Q',2)} = ${S('Q','12')} = ${S('C','12')} × ΔV<sub>123</sub> = ${n(C12)} × ${n(Vparallel)} = ${vv(Q12)} μC`);
+      h+=`<div class="ans" dir="ltr">Q₁ = Q₂ = ${vv(Q1)} μC &nbsp; ، &nbsp; Q₃ = ${vv(Q3)} μC &nbsp; ، &nbsp; Q₄ = ${vv(Q4)} μC</div>`;
+    }
+
+    const energyData=[
+      {i:1,Q:Q1,V:V1,E:E1},
+      {i:2,Q:Q2,V:V2,E:E2},
+      {i:3,Q:Q3,V:V3,E:E3},
+      {i:4,Q:Q4,V:V4,E:E4}
+    ];
+    energyData.forEach(d=>{
+      if(sel.has('energy'+d.i)){
+        h+=`<div class="sec">${++k}) الطاقة المختزنة في المجال الكهربائي بين صفحتي المتسعة ${c(d.i)}:</div>`+
+          `<p class="step">نحسب أولًا فرق الجهد بين صفحتي ${c(d.i)}:</p>`+
+          eq(`ΔV₍${d.i}₎ = ${fr(S('Q',d.i),c(d.i))} = ${fr(n(d.Q),n(v['C'+d.i]))} = ${vv(d.V)} V`)+
+          `<p class="step">ثم نطبق قانون الطاقة الكهربائية المختزنة:</p>`+
+          eq(`PE₍${d.i}₎ = ${fr(1,2)} ${S('Q',d.i)} ΔV₍${d.i}₎`)+
+          eq(`PE₍${d.i}₎ = ${fr(1,2)} × ${n(d.Q)} × 10<sup>-6</sup> × ${n(d.V)} = ${vv(d.E*1e6)} × 10<sup>-6</sup> J`)+
+          `<div class="ans">PE₍${d.i}₎ = <span dir="ltr">${vv(d.E*1e6)} × 10<sup>-6</sup> J</span></div>`;
+      }
+    });
+    return h;
+  }
+},
+{
+  id:'c3',
+  name:'الدائرة رقم (3)',
+  fields:[
+    {k:'C1', label:S('C',1), u:'μF', units:'cap', d:6},
+    {k:'C2', label:S('C',2), u:'μF', units:'cap', d:3},
+    {k:'C3', label:S('C',3), u:'μF', units:'cap', d:12},
+    {k:'C4', label:S('C',4), u:'μF', units:'cap', d:18},
+    {k:'C5', label:S('C',5), u:'μF', units:'cap', d:9}
+  ],
+  reqs:[
+    {id:'ceq', text:'السعة المكافئة للمجموعة ' + S('C','eq')},
+    {id:'qt',  text:'إذا سلط فرق جهد كهربائي مستمر {Q} بين النقطتين (a,b) فما مقدار الشحنة الكلية المختزنة في المجموعة؟',
+     inp:{k:'V', label:'ΔV', u:'V', units:'volt', d:24, also:['qs']}},
+    {id:'qs',  text:'الشحنة المختزنة في أي من صفيحتي كل متسعة'},
+    {id:'dvab', def:false, noV:true,
+     text:'إذا كانت الشحنة الكلية المختزنة في المجموعة {Q} جد مقدار فرق الجهد المستمر بين النقطتين (a) و (b)',
+     inp:{k:'Qg', label:S('Q','total'), u:'μC', units:'charge', d:300}}
+  ],
+
+  /* ---------- الرسم ---------- */
+  svg(v){
+    const wire='stroke="#52657d" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"';
+    const c1='#e34b3f', c2='#15946b', c3='#2d6fd0', c4='#e08a2e', c5='#d04aa8', node='#243e68', vcol='#6942bb';
+    // متسعة على سلك أفقي (الصفيحتان عموديتان)
+    const hcap=(x,y,color)=>`<line x1="${x-8}" y1="${y-26}" x2="${x-8}" y2="${y+26}" stroke="${color}" stroke-width="4" stroke-linecap="round"/><line x1="${x+8}" y1="${y-26}" x2="${x+8}" y2="${y+26}" stroke="${color}" stroke-width="4" stroke-linecap="round"/>`;
+    // متسعة على سلك عمودي (الصفيحتان أفقيتان)
+    const vcap=(x,y,color)=>`<line x1="${x-26}" y1="${y-8}" x2="${x+26}" y2="${y-8}" stroke="${color}" stroke-width="4" stroke-linecap="round"/><line x1="${x-26}" y1="${y+8}" x2="${x+26}" y2="${y+8}" stroke="${color}" stroke-width="4" stroke-linecap="round"/>`;
+    // متسعة على سلك مائل: السلك ينقطع في منتصفه والصفيحتان عموديتان على اتجاه السلك
+    const slant=(x1,y1,x2,y2,color)=>{
+      const dx=x2-x1, dy=y2-y1, L=Math.hypot(dx,dy), ux=dx/L, uy=dy/L;
+      const mx=(x1+x2)/2, my=(y1+y2)/2, g=8, ang=Math.atan2(dy,dx)*180/Math.PI;
+      const ax=(mx-ux*g).toFixed(1), ay=(my-uy*g).toFixed(1), bx=(mx+ux*g).toFixed(1), by=(my+uy*g).toFixed(1);
+      return `<path ${wire} fill="none" d="M${x1} ${y1} L${ax} ${ay} M${bx} ${by} L${x2} ${y2}"/>`+
+        `<g transform="translate(${mx} ${my}) rotate(${ang.toFixed(2)})"><line x1="-8" y1="-26" x2="-8" y2="26" stroke="${color}" stroke-width="4" stroke-linecap="round"/><line x1="8" y1="-26" x2="8" y2="26" stroke="${color}" stroke-width="4" stroke-linecap="round"/></g>`;
+    };
+    const lab=(x,y,i,val,anchor,color)=>`<text x="${x}" y="${y}" text-anchor="${anchor}" font-size="15" fill="${color}" direction="ltr" font-weight="800">C<tspan font-size="10" dy="4">${i}</tspan><tspan dy="-4"> = ${val} ${getUnit('C'+i)}</tspan></text>`;
+    let s='<svg viewBox="0 0 620 440" role="img" aria-label="رسم الدائرة الثالثة" xmlns="http://www.w3.org/2000/svg">';
+
+    // مطابقة للشكل (43):
+    // سلك أفقي في الأعلى (الزاوية اليسرى ← a ← الزاوية اليمنى) وفيه C1 يسار a و C4 يمين a.
+    // من الزاويتين يميل سلكان إلى النقطة b وعلى كل منهما C2 (يسار) و C5 (يمين).
+    // في الوسط سلك عمودي من a إلى b وفيه C3 فقط، ولـ a و b طرفان خارجيان.
+    s+=`<path ${wire} fill="none" d="M70 150 H192 M208 150 H412 M428 150 H550"/>`;
+    s+=hcap(200,150,c1)+hcap(420,150,c4);
+    s+=slant(70,150,310,375,c2);
+    s+=slant(550,150,310,375,c5);
+    s+=`<path ${wire} fill="none" d="M310 75 V250 M310 266 V410"/>`;
+    s+=vcap(310,258,c3);
+
+    // النقاط: طرفا التوصيل و a و b
+    [[310,75],[310,150],[310,345],[310,375],[310,410]].forEach(p=>{s+=`<circle cx="${p[0]}" cy="${p[1]}" r="5" fill="${node}"/>`});
+    s+=`<text x="320" y="142" font-size="18" fill="${node}" font-weight="900">a</text>`;
+    s+=`<text x="324" y="395" font-size="18" fill="${node}" font-weight="900">b</text>`;
+
+    // التسميات والقيم
+    s+=lab(200,116,1,displayValue('C1',v.C1),'middle',c1);
+    s+=lab(420,116,4,displayValue('C4',v.C4),'middle',c4);
+    s+=lab(290,246,3,displayValue('C3',v.C3),'end',c3);
+    s+=lab(158,292,2,displayValue('C2',v.C2),'end',c2);
+    s+=lab(462,292,5,displayValue('C5',v.C5),'start',c5);
+    s+='</svg>';
+    return s;
+  },
+
+  /* ---------- الحل مطابق للحل الظاهر في المصدر ---------- */
+  solve(v, sel, method=seriesMethod){
+    const {C1,C2,C3,C4,C5,V}=v;
+    const C12=ser2(C1,C2,method);
+    const C45=ser2(C4,C5,method);
+    const Ceq=C12+C3+C45;
+    const Qt=Ceq*V;
+    const Q12=C12*V;
+    const Q3=C3*V;
+    const Q45=C45*V;
+    const c=i=>S('C',i), ceqS=S('C','eq');
+
+    const c12Steps=()=>
+      `<p class="step">نجد السعة المكافئة للمتسعتين ${c(1)} و${c(2)} المربوطتين على <b>التوالي</b>:</p>`+
+      (method==='product'
+        ? eq(`${S('C','1,2')} = ${fr(c(1)+' × '+c(2),c(1)+' + '+c(2))}`)+
+          eq(`${S('C','1,2')} = ${fr(n(C1)+' × '+n(C2),n(C1)+' + '+n(C2))} = ${vv(C12)} μF`)
+        : eq(`${fr('1',S('C','1,2'))} = ${fr('1',c(1))} + ${fr('1',c(2))}`)+
+          eq(`${fr('1',S('C','1,2'))} = ${fr('1',n(C1))} + ${fr('1',n(C2))} = ${fr(n(C1+C2),n(C1*C2))}`)+
+          eq(`${S('C','1,2')} = ${fr('1', fr(n(C1+C2), n(C1*C2)))}`)+eq(`${S('C','1,2')} = ${fr(n(C1*C2), n(C1+C2))} = ${vv(C12)} μF`))+
+      eq(`${S('C','1,2')} = ${vv(C12)} μF`);
+
+    const c45Steps=()=>
+      `<p class="step">ونجد السعة المكافئة للمتسعتين ${c(4)} و${c(5)} المربوطتين على <b>التوالي</b>:</p>`+
+      (method==='product'
+        ? eq(`${S('C','4,5')} = ${fr(c(4)+' × '+c(5),c(4)+' + '+c(5))}`)+
+          eq(`${S('C','4,5')} = ${fr(n(C4)+' × '+n(C5),n(C4)+' + '+n(C5))} = ${vv(C45)} μF`)
+        : eq(`${fr('1',S('C','4,5'))} = ${fr('1',c(4))} + ${fr('1',c(5))}`)+
+          eq(`${fr('1',S('C','4,5'))} = ${fr('1',n(C4))} + ${fr('1',n(C5))} = ${fr(n(C4+C5),n(C4*C5))}`)+
+          eq(`${S('C','4,5')} = ${fr('1', fr(n(C4+C5), n(C4*C5)))}`)+eq(`${S('C','4,5')} = ${fr(n(C4*C5), n(C4+C5))} = ${vv(C45)} μF`))+
+      eq(`${S('C','4,5')} = ${vv(C45)} μF`);
+
+    let h=''; let k=0;
+    if(sel.has('ceq')){
+      h+=`<div class="sec">${++k}) السعة المكافئة للمجموعة:</div>`+
+        c12Steps()+c45Steps()+
+        `<p class="step">تكون المتسعات المكافئة ${S('C','1,2')} و${c(3)} و${S('C','4,5')} على <b>التوازي</b>، لذلك:</p>`+
+        eq(`${ceqS} = ${S('C','1,2')} + ${c(3)} + ${S('C','4,5')}`)+
+        eq(`${ceqS} = ${n(C12)} + ${n(C3)} + ${n(C45)} = ${vv(Ceq)} μF`)+
+        `<div class="ans">${ceqS} = <span dir="ltr">${vv(Ceq)} μF</span></div>`;
+    }
+    if(sel.has('qt')){
+      h+=`<div class="sec">${++k}) الشحنة الكلية المختزنة في المجموعة:</div>`+
+        eq(`${S('Q','total')} = ${ceqS} × ΔV`)+
+        eq(`${S('Q','total')} = ${n(Ceq)} × ${n(V)} = ${vv(Qt)} μC`)+
+        `<div class="ans">${S('Q','total')} = <span dir="ltr">${vv(Qt)} μC</span></div>`;
+    }
+    if(sel.has('qs')){
+      h+=`<div class="sec">${++k}) الشحنة المختزنة في أي من صفيحتي كل متسعة:</div>`+
+        `<p class="step">لأن الفروع الثلاثة على التوازي، يكون فرق الجهد على كل فرع مساويًا لفرق الجهد الكلي:</p>`+
+        eq(`ΔV = ${n(V)} V`)+
+        `<p class="step">للمتسعتين ${c(1)} و${c(2)} على التوالي:</p>`+
+        eq(`${S('Q',1)} = ${S('Q',2)} = ${S('C','1,2')} × ΔV = ${n(C12)} × ${n(V)} = ${vv(Q12)} μC`)+
+        `<p class="step">للمتسعة ${c(3)}:</p>`+
+        eq(`${S('Q',3)} = ${c(3)} × ΔV = ${n(C3)} × ${n(V)} = ${vv(Q3)} μC`)+
+        `<p class="step">للمتسعتين ${c(4)} و${c(5)} على التوالي:</p>`+
+        eq(`${S('Q',4)} = ${S('Q',5)} = ${S('C','4,5')} × ΔV = ${n(C45)} × ${n(V)} = ${vv(Q45)} μC`)+
+        `<div class="ans" dir="ltr">Q₁ = Q₂ = ${vv(Q12)} μC &nbsp; ، &nbsp; Q₃ = ${vv(Q3)} μC &nbsp; ، &nbsp; Q₄ = Q₅ = ${vv(Q45)} μC</div>`;
+    }
+    if(sel.has('dvab')){
+      const Qg=v.Qg, dVab=Qg/Ceq, dvS='ΔV<sub>T</sub>';
+      h+=`<div class="sec">${++k}) فرق الجهد المستمر بين النقطتين (a) و (b):</div>`;
+      if(sel.has('ceq')){
+        h+=`<p class="step">من الفقرة (1) السعة المكافئة للمجموعة:</p>`+eq(`${ceqS} = ${vv(Ceq)} μF`);
+      } else {
+        h+=c12Steps()+c45Steps()+
+          `<p class="step">تكون المتسعات المكافئة ${S('C','1,2')} و${c(3)} و${S('C','4,5')} على <b>التوازي</b>، لذلك:</p>`+
+          eq(`${ceqS} = ${S('C','1,2')} + ${c(3)} + ${S('C','4,5')}`)+
+          eq(`${ceqS} = ${n(C12)} + ${n(C3)} + ${n(C45)} = ${vv(Ceq)} μF`);
+      }
+      h+=`<p class="step">فرق الجهد بين النقطتين (a) و (b) هو فرق الجهد الكلي للمجموعة:</p>`+
+        eq(`${dvS} = ${fr(S('Q','total'),ceqS)}`)+
+        eq(`${dvS} = ${fr(n(Qg),n(Ceq))} = ${vv(dVab)} V`)+
+        `<div class="ans">${dvS} = <span dir="ltr">${vv(dVab)} V</span></div>`;
+    }
+    return h;
+  }
+
+}
+,{
+  id:'c4',
+  name:'الدائرة رقم (4)',
+  fields:[
+    {k:'C1', label:S('C',1), u:'μF', units:'cap', d:5},
+    {k:'C2', label:S('C',2), u:'μF', units:'cap', d:10},
+    {k:'C3', label:S('C',3), u:'μF', units:'cap', d:30},
+    {k:'V',  label:'ΔV',    u:'V',  units:'volt', d:6}
+  ],
+  reqs:[
+    {id:'ceq', text:'السعة المكافئة للمجموعة ' + S('C','eq')},
+    {id:'qs',  text:'الشحنة المختزنة في أي من صفيحتي كل متسعة'},
+    {id:'energy1', def:false, text:'الطاقة المختزنة في المجال الكهربائي بين صفيحتي المتسعة ' + S('C',1)},
+    {id:'energy2', def:false, text:'الطاقة المختزنة في المجال الكهربائي بين صفيحتي المتسعة ' + S('C',2)},
+    {id:'energy3', text:'الطاقة المختزنة في المجال الكهربائي بين صفيحتي المتسعة ' + S('C',3)}
+  ],
+
+  svg(v){
+    const wire='stroke="#52657d" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"';
+    const c1='#e34b3f', c2='#15946b', c3='#2d6fd0', batt='#6942bb', node='#243e68';
+    const hcap=(x,y,color)=>`<line x1="${x-12}" y1="${y-28}" x2="${x-12}" y2="${y+28}" stroke="${color}" stroke-width="4" stroke-linecap="round"/><line x1="${x+12}" y1="${y-28}" x2="${x+12}" y2="${y+28}" stroke="${color}" stroke-width="4" stroke-linecap="round"/>`;
+    const lab=(x,y,i,val,color)=>`<text x="${x}" y="${y}" text-anchor="middle" font-size="15" fill="${color}" direction="ltr" font-weight="800">C<tspan font-size="10" dy="4">${i}</tspan><tspan dy="-4"> = ${val} ${getUnit('C'+i)}</tspan></text>`;
+    let s='<svg viewBox="0 0 620 410" role="img" aria-label="رسم الدائرة الرابعة" xmlns="http://www.w3.org/2000/svg">';
+    // مجموعة التوازي (C1 فوق و C2 تحت)
+    s+=`<path ${wire} fill="none" d="M150 90 H233 M257 90 H340 M150 190 H233 M257 190 H340 M150 90 V190 M340 90 V190"/>`;
+    // السلك الأيسر للبطارية، والأيمن عبر C3 ثم إلى البطارية
+    s+=`<path ${wire} fill="none" d="M150 140 H60 V330 H278"/>`;
+    s+=`<path ${wire} fill="none" d="M340 140 H428 M452 140 H560 V330 H306"/>`;
+    s+=hcap(245,90,c1)+hcap(245,190,c2)+hcap(440,140,c3);
+    s+=`<line x1="278" y1="302" x2="278" y2="358" stroke="${batt}" stroke-width="4" stroke-linecap="round"/><line x1="306" y1="312" x2="306" y2="348" stroke="${batt}" stroke-width="6" stroke-linecap="round"/>`;
+    [[150,140],[340,140]].forEach(p=>{s+=`<circle cx="${p[0]}" cy="${p[1]}" r="5" fill="${node}"/>`});
+    s+=lab(245,54,1,displayValue('C1',v.C1),c1);
+    s+=lab(245,238,2,displayValue('C2',v.C2),c2);
+    s+=lab(440,100,3,displayValue('C3',v.C3),c3);
+    s+=`<text x="292" y="392" text-anchor="middle" font-size="16" fill="${batt}" direction="ltr" font-weight="800">ΔV = ${displayValue('V',v.V)} ${getUnit('V')}</text>`;
+    s+='</svg>';
+    return s;
+  },
+
+  solve(v, sel, method=seriesMethod){
+    const {C1,C2,C3,V}=v;
+    const C12=C1+C2, Ceq=ser2(C12,C3,method), Qt=Ceq*V, V12=Qt/C12, Q1=C1*V12, Q2=C2*V12, Q3=Qt;
+    const c=i=>S('C',i), ceqS=S('C','eq'), c12=S('C','1,2');
+    const E=(Q,C)=>0.5*Q*Q/C;   // بوحدة 10^-6 J
+    const parSteps=()=>
+      `<p class="step">المتسعتان ${c(1)} و${c(2)} على <b>التوازي</b>:</p>`+
+      eq(`${c12} = ${c(1)} + ${c(2)} = ${n(C1)} + ${n(C2)} = ${vv(C12)} μF`);
+    const ceqSteps=()=>
+      parSteps()+
+      `<p class="step">والمجموعة (${c12}) مع ${c(3)} على <b>التوالي</b>:</p>`+
+      (method==='product'
+        ? eq(`${ceqS} = ${fr(c12+' × '+c(3),c12+' + '+c(3))}`)+
+          eq(`${ceqS} = ${fr(n(C12)+' × '+n(C3),n(C12)+' + '+n(C3))} = ${vv(Ceq)} μF`)
+        : eq(`${fr('1',ceqS)} = ${fr('1',c12)} + ${fr('1',c(3))}`)+
+          eq(`${fr('1',ceqS)} = ${fr('1',n(C12))} + ${fr('1',n(C3))} = ${fr(n(C12+C3),n(C12*C3))}`)+
+          eq(`${ceqS} = ${fr('1', fr(n(C12+C3), n(C12*C3)))}`)+eq(`${ceqS} = ${fr(n(C12*C3), n(C12+C3))} = ${vv(Ceq)} μF`));
+    const qtSteps=()=>
+      `<p class="step">الشحنة الكلية:</p>`+
+      eq(`${S('Q','T')} = ${ceqS} × ΔV<sub>T</sub> = ${n(Ceq)} × ${n(V)} = ${vv(Qt)} μC`)+
+      `<p class="step">لأن المجموعة (${c12}) و${c(3)} على التوالي فشحنتهما متساوية:</p>`+
+      eq(`${S('Q','T')} = ${S('Q','1,2')} = ${S('Q',3)} = ${vv(Qt)} μC`);
+    const v12Steps=()=>
+      `<p class="step">فرق الجهد على مجموعة التوازي:</p>`+
+      eq(`ΔV<sub>1,2</sub> = ${fr(S('Q','1,2'),c12)} = ${fr(n(Qt),n(C12))} = ${vv(V12)} V = ΔV<sub>1</sub> = ΔV<sub>2</sub>`);
+
+    let h='', k=0;
+    if(sel.has('ceq')){
+      h+=`<div class="sec">${++k}) السعة المكافئة للمجموعة:</div>`+ceqSteps()+
+        `<div class="ans">${ceqS} = <span dir="ltr">${vv(Ceq)} μF</span></div>`;
+    }
+    if(sel.has('qs')){
+      h+=`<div class="sec">${++k}) الشحنة المختزنة في أي من صفيحتي كل متسعة:</div>`;
+      if(!sel.has('ceq')) h+=ceqSteps();
+      h+=qtSteps()+v12Steps()+
+        `<p class="step">شحنة كل من ${c(1)} و${c(2)}:</p>`+
+        eq(`${S('Q',1)} = ${c(1)} × ΔV<sub>1</sub> = ${n(C1)} × ${n(V12)} = ${vv(Q1)} μC`)+
+        eq(`${S('Q',2)} = ${c(2)} × ΔV<sub>2</sub> = ${n(C2)} × ${n(V12)} = ${vv(Q2)} μC`)+
+        `<div class="ans" dir="ltr">Q₁ = ${vv(Q1)} μC &nbsp; ، &nbsp; Q₂ = ${vv(Q2)} μC &nbsp; ، &nbsp; Q₃ = ${vv(Q3)} μC</div>`;
+    }
+    [[1,C1,Q1],[2,C2,Q2],[3,C3,Q3]].forEach(([i,C,Q])=>{
+      if(sel.has('energy'+i)){
+        h+=`<div class="sec">${++k}) الطاقة المختزنة في المجال الكهربائي بين صفيحتي المتسعة ${c(i)}:</div>`;
+        if(!sel.has('ceq') && !sel.has('qs')) h+=ceqSteps()+qtSteps()+(i<3?v12Steps():'');
+        else if(i===3 && !sel.has('qs')) h+=qtSteps();
+        else if(i<3 && !sel.has('qs')) h+=qtSteps()+v12Steps();
+        h+=`<p class="step">نطبق قانون الطاقة المختزنة:</p>`+
+          eq(`PE<sub>${i}</sub> = ${fr(1,2)} ${fr(S('Q',i)+'<sup>2</sup>',c(i))}`)+
+          eq(`PE<sub>${i}</sub> = ${fr(1,2)} × ${fr('('+n(Q)+' × 10<sup>-6</sup>)<sup>2</sup>',n(C)+' × 10<sup>-6</sup>')} = ${vv(E(Q,C))} × 10<sup>-6</sup> J`)+
+          `<div class="ans">PE<sub>${i}</sub> = <span dir="ltr">${vv(E(Q,C))} × 10<sup>-6</sup> J</span></div>`;
+      }
+    });
+    return h;
+  }
+}
+,{
+  id:'c5',
+  name:'الدائرة رقم (5) — فصل وإعادة ربط',
+  cust:{
+    q:[['Q','الشحنة المختزنة'],['V','فرق الجهد'],['U','الطاقة المختزنة'],['L','الطاقة المفقودة عند الانتقال من (a)']],
+    c:[['1','المتسعة C₁'],['2','المتسعة C₂'],['g','المجموعة (المتسعتان معًا)']],
+    s:[['a','الشكل (a)'],['b','الشكل (b)'],['c','الشكل (c)']],
+    d:['Q','1','b'],
+    text:(q,c,st)=>{
+      const sn=`في الشكل (${st})`, ci=`المتسعة C<sub>${c}</sub>`;
+      if(q==='L') return `الطاقة المفقودة عند الانتقال من (a) إلى (${st})`;
+      if(q==='Q') return c==='g' ? `الشحنة الكلية المختزنة في المجموعة ${sn}` : `الشحنة المختزنة في أي من صفيحتي ${ci} ${sn}`;
+      if(q==='V') return c==='g' ? `فرق الجهد بين طرفي المجموعة ${sn}` : `فرق الجهد بين صفيحتي ${ci} ${sn}`;
+      return c==='g' ? `الطاقة الكلية المختزنة في المجموعة ${sn}` : `الطاقة المختزنة في المجال الكهربائي بين صفيحتي ${ci} ${sn}`;
+    }
+  },
+  fields:[
+    {k:'C1', label:S('C',1), u:'μF', units:'cap', d:8},
+    {k:'C2', label:S('C',2), u:'μF', units:'cap', d:2},
+    {k:'V',  label:'ΔV',    u:'V',  units:'volt', d:75},
+    {k:'conn', label:'الربط الأول بالبطارية (a)', type:'select', d:'s', options:[['s','على التوالي'],['p','على التوازي']]}
+  ],
+  reqs:[
+    {id:'ceqa', def:false, text:'السعة المكافئة للمجموعة في الشكل (a)'},
+    {id:'qa',   def:false, text:'الشحنة المختزنة في أي من صفيحتي كل متسعة في الشكل (a) (قبل الفصل)'},
+    {id:'ua',   def:false, text:'الطاقة الكلية المختزنة في الشكل (a) (قبل الفصل)'},
+    {id:'qb',   text:'مقدار الشحنة المختزنة في أي من صفيحتي كل متسعة في الشكل (b) (ربط الصفائح المتماثلة الشحنة)'},
+    {id:'vb',   def:false, text:'فرق الجهد بين صفيحتي كل متسعة في الشكل (b)'},
+    {id:'ub',   def:false, text:'الطاقة الكلية المختزنة في الشكل (b)'},
+    {id:'lb',   def:false, text:'الطاقة المفقودة عند الانتقال من (a) إلى (b)'},
+    {id:'qc',   text:'مقدار الشحنة المختزنة في أي من صفيحتي كل متسعة في الشكل (c) (ربط الصفائح المختلفة الشحنة)'},
+    {id:'vc',   def:false, text:'فرق الجهد بين صفيحتي كل متسعة في الشكل (c)'},
+    {id:'uc',   def:false, text:'الطاقة الكلية المختزنة في الشكل (c)'},
+    {id:'lc',   def:false, text:'الطاقة المفقودة عند الانتقال من (a) إلى (c)'},
+    {id:'cust', def:false, custom:true, text:'مطلوب مخصص'}
+  ],
+
+  svg(v){
+    const wire='stroke="#52657d" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"';
+    const c1='#e34b3f', c2='#15946b', batt='#6942bb', ink='#16233b';
+    const cap=(x,y,color)=>`<line x1="${x-10}" y1="${y-24}" x2="${x-10}" y2="${y+24}" stroke="${color}" stroke-width="4" stroke-linecap="round"/><line x1="${x+10}" y1="${y-24}" x2="${x+10}" y2="${y+24}" stroke="${color}" stroke-width="4" stroke-linecap="round"/>`;
+    const lab=(x,y,i,val,color,anc)=>`<text x="${x}" y="${y}" text-anchor="${anc||'middle'}" font-size="15" fill="${color}" direction="ltr" font-weight="800">C<tspan font-size="10" dy="4">${i}</tspan><tspan dy="-4"> = ${val} ${getUnit('C'+i)}</tspan></text>`;
+    const sg=(x,y,t,color)=>`<text x="${x}" y="${y}" text-anchor="middle" font-size="17" fill="${color}" font-weight="900">${t}</text>`;
+    const nm=(x,y,t)=>`<text x="${x}" y="${y}" font-size="18" fill="${ink}" font-weight="900" direction="ltr">${t}</text>`;
+    const pl=(x,y,t)=>`<text x="${x}" y="${y}" text-anchor="middle" font-size="12" fill="${ink}" font-weight="800">${t}</text>`;
+    const V1=displayValue('C1',v.C1), V2=displayValue('C2',v.C2);
+    const L=150, R=470;
+    const opt=v._opt||{}, off=opt.note?44:0, H=(opt.noC?520:700)+off, nmz=opt.names||['(a)','(b)','(c)'];
+    const tag=(x,y,t)=> opt.names ? `<text x="562" y="${y}" text-anchor="middle" font-size="14" fill="${ink}" font-weight="900">${t}</text>` : nm(x,y,t);
+    let s=`<svg viewBox="0 0 620 ${H}" role="img" aria-label="${opt.note?'رسم السؤال':'رسم الدائرة الخامسة'}" xmlns="http://www.w3.org/2000/svg">`;
+    if(opt.note) s+=`<rect x="14" y="4" width="592" height="34" rx="9" fill="#d4ff2a" stroke="#6f9a00" stroke-width="2"/><text x="310" y="26" text-anchor="middle" font-size="15" fill="#3a1600" font-weight="900">⚠ ${opt.note}</text>`;
+    s+=`<g transform="translate(0,${off})">`;
+
+    // ---------- (a) ----------
+    s+=tag(520,112,nmz[0]);
+    if(v.conn==='p'){
+      // ربط أول على التوازي: C1 و C2 فرعان
+      s+=`<path ${wire} fill="none" d="M${L} 40 H${R} V170 H344 M296 170 H${L} V40 M250 40 V66 M250 84 V170 M370 40 V66 M370 84 V170"/>`;
+      s+=`<line x1="226" y1="66" x2="274" y2="66" stroke="${c1}" stroke-width="4" stroke-linecap="round"/><line x1="226" y1="84" x2="274" y2="84" stroke="${c1}" stroke-width="4" stroke-linecap="round"/>`;
+      s+=`<line x1="346" y1="66" x2="394" y2="66" stroke="${c2}" stroke-width="4" stroke-linecap="round"/><line x1="346" y1="84" x2="394" y2="84" stroke="${c2}" stroke-width="4" stroke-linecap="round"/>`;
+      s+=sg(214,70,'+',c1)+sg(214,94,'−',c1)+sg(334,70,'+',c2)+sg(334,94,'−',c2);
+      s+=lab(250,118,1,V1,c1)+lab(370,118,2,V2,c2);
+    }else{
+      s+=`<path ${wire} fill="none" d="M${L} 40 H240 M260 40 H360 M380 40 H${R} V170 H344 M296 170 H${L} V40"/>`;
+      s+=cap(250,40,c1)+cap(370,40,c2);
+      s+=pl(240,12,'L')+pl(260,12,'K')+pl(360,12,'M')+pl(380,12,'N');
+      s+=sg(232,84,'+',c1)+sg(268,84,'−',c1)+sg(352,84,'+',c2)+sg(388,84,'−',c2);
+      s+=lab(250,110,1,V1,c1)+lab(370,110,2,V2,c2);
+    }
+    s+=`<path ${wire} fill="none" d="M${L} 105 H120 M${R} 105 H500"/>`;
+    s+=`<line x1="308" y1="146" x2="308" y2="194" stroke="${batt}" stroke-width="4" stroke-linecap="round"/><line x1="332" y1="156" x2="332" y2="184" stroke="${batt}" stroke-width="6" stroke-linecap="round"/>`;
+    s+=`<path ${wire} fill="none" d="M296 170 H308 M332 170 H344"/>`;
+    s+=`<text x="320" y="216" text-anchor="middle" font-size="16" fill="${batt}" direction="ltr" font-weight="800">ΔV = ${displayValue('V',v.V)} ${getUnit('V')}</text>`;
+
+    // ---------- (b) و (c): C1 في الأعلى و C2 في الأسفل ----------
+    const stage=(T,name,rev)=>{
+      const B=T+130, M=(T+B)/2;
+      let o=tag(520,M+6,name);
+      o+=`<path ${wire} fill="none" d="M${L} ${T} H298 M322 ${T} H${R} V${B} H322 M298 ${B} H${L} V${T}"/>`;
+      o+=`<path ${wire} fill="none" d="M${L} ${M} H120 M${R} ${M} H500"/>`;
+      o+=cap(310,T,c1)+cap(310,B,c2);
+      o+=sg(298,T-30,'−',c1)+sg(322,T-30,'+',c1);
+      o+=rev ? sg(298,B-30,'+',c2)+sg(322,B-30,'−',c2) : sg(298,B-30,'−',c2)+sg(322,B-30,'+',c2);
+      o+=lab(284,T-30,1,V1,c1,'end')+lab(284,B-30,2,V2,c2,'end');
+      return o;
+    };
+    s+=stage(310,nmz[1],!!opt.revB);
+    if(!opt.noC) s+=stage(530,nmz[2],true);
+    s+='</g></svg>';
+    return s;
+  },
+
+  solve(v, sel, method=seriesMethod){
+    const {C1,C2,V}=v, conn=v.conn;
+    const c=i=>S('C',i), ceqS=S('C','eq'), Cp=C1+C2;
+    const Ca = conn==='p' ? Cp : ser2(C1,C2,method);
+    const Q1a = conn==='p' ? C1*V : Ca*V;
+    const Q2a = conn==='p' ? C2*V : Ca*V;
+    const Ua = 0.5*Q1a*Q1a/C1 + 0.5*Q2a*Q2a/C2;
+    const Qb=Q1a+Q2a, Vb=Qb/Cp, Q1b=C1*Vb, Q2b=C2*Vb, Ub=0.5*Qb*Qb/Cp;
+    const Qc=Math.abs(Q1a-Q2a), Vc=Qc/Cp, Q1c=C1*Vc, Q2c=C2*Vc, Uc=0.5*Qc*Qc/Cp;
+    const J='× 10<sup>-6</sup> J';
+    const Us=(x)=>`<span dir="ltr">${vv(x)} ${J}</span>`;
+    const same=Math.abs(Q1a-Q2a)<1e-9;
+
+    // ---- خطوات (a) ----
+    const ceqA=()=> conn==='p'
+      ? `<p class="step">المتسعتان مربوطتان على <b>التوازي</b> مع البطارية:</p>`+eq(`${ceqS} = ${c(1)} + ${c(2)} = ${n(C1)} + ${n(C2)} = ${vv(Ca)} μF`)
+      : `<p class="step">المتسعتان مربوطتان على <b>التوالي</b>:</p>`+
+        (method==='product'
+          ? eq(`${ceqS} = ${fr(c(1)+' × '+c(2),c(1)+' + '+c(2))}`)+eq(`${ceqS} = ${fr(n(C1)+' × '+n(C2),n(C1)+' + '+n(C2))} = ${vv(Ca)} μF`)
+          : eq(`${fr('1',ceqS)} = ${fr('1',c(1))} + ${fr('1',c(2))}`)+
+            eq(`${fr('1',ceqS)} = ${fr('1',n(C1))} + ${fr('1',n(C2))} = ${fr(n(C1+C2),n(C1*C2))}`)+
+            eq(`${ceqS} = ${fr('1', fr(n(C1+C2), n(C1*C2)))}`)+eq(`${ceqS} = ${fr(n(C1*C2), n(C1+C2))} = ${vv(Ca)} μF`));
+    const qA=()=> conn==='p'
+      ? `<p class="step">على التوازي يكون فرق الجهد على كل متسعة مساويًا لفرق الجهد الكلي:</p>`+
+        eq(`${S('Q',1)} = ${c(1)} × ΔV = ${n(C1)} × ${n(V)} = ${vv(Q1a)} μC`)+
+        eq(`${S('Q',2)} = ${c(2)} × ΔV = ${n(C2)} × ${n(V)} = ${vv(Q2a)} μC`)
+      : `<p class="step">على التوالي تكون شحنة المتسعتين متساوية وتساوي الشحنة الكلية:</p>`+
+        eq(`${S('Q',1)} = ${S('Q',2)} = ${S('Q','T')} = ${ceqS} × ΔV = ${n(Ca)} × ${n(V)} = ${vv(Q1a)} μC`);
+    let A=false; const needA=()=>{ if(A) return ''; A=true; return `<p class="step"><b>الشكل (a):</b> نحسب الشحنة على كل متسعة قبل الفصل:</p>`+(sel.has('ceqa')?'':ceqA())+qA(); };
+    let B=false; const needB=()=>{ if(B) return ''; B=true;
+      return needA()+`<p class="step"><b>الشكل (b):</b> عند ربط الصفائح المتماثلة الشحنة تصبح المتسعتان على <b>التوازي</b>، فتتجمع الشحنات:</p>`+
+        eq(`${S('Q','total')} = ${S('Q',1)} + ${S('Q',2)} = ${n(Q1a)} + ${n(Q2a)} = ${vv(Qb)} μC`)+
+        eq(`${S('C','eq')} = ${c(1)} + ${c(2)} = ${n(C1)} + ${n(C2)} = ${vv(Cp)} μF`)+
+        `<p class="step">فرق الجهد المشترك بين صفيحتي كل متسعة:</p>`+
+        eq(`ΔV = ${fr(S('Q','total'),ceqS)} = ${fr(n(Qb),n(Cp))} = ${vv(Vb)} V`)+
+        eq(`${S('Q',1)} = ${c(1)} × ΔV = ${n(C1)} × ${n(Vb)} = ${vv(Q1b)} μC`)+
+        eq(`${S('Q',2)} = ${c(2)} × ΔV = ${n(C2)} × ${n(Vb)} = ${vv(Q2b)} μC`); };
+    let C=false; const needC=()=>{ if(C) return ''; C=true;
+      return needA()+`<p class="step"><b>الشكل (c):</b> عند ربط الصفائح المختلفة الشحنة تلغي الشحنات بعضها، فتكون الشحنة الكلية هي الفرق بينهما:</p>`+
+        eq(`${S('Q','total')} = |${S('Q',1)} − ${S('Q',2)}| = |${n(Q1a)} − ${n(Q2a)}| = ${vv(Qc)} μC`)+
+        eq(`${S('C','eq')} = ${c(1)} + ${c(2)} = ${vv(Cp)} μF`)+
+        (same ? `<p class="step">الشحنتان متساوتان في المقدار، فتتعادلان كليًا وتصبح شحنة المتسعتين وفرق الجهد صفرًا.</p>`
+              : `<p class="step">فرق الجهد المشترك بين صفيحتي كل متسعة:</p>`)+
+        eq(`ΔV = ${fr(S('Q','total'),ceqS)} = ${fr(n(Qc),n(Cp))} = ${vv(Vc)} V`)+
+        eq(`${S('Q',1)} = ${c(1)} × ΔV = ${n(C1)} × ${n(Vc)} = ${vv(Q1c)} μC`)+
+        eq(`${S('Q',2)} = ${c(2)} × ΔV = ${n(C2)} × ${n(Vc)} = ${vv(Q2c)} μC`); };
+    const uAsteps=()=>`<p class="step">الطاقة قبل الفصل (مجموع طاقتي المتسعتين):</p>`+
+      eq(`U<sub>a</sub> = ${fr(1,2)} ${fr(S('Q',1)+'<sup>2</sup>',c(1))} + ${fr(1,2)} ${fr(S('Q',2)+'<sup>2</sup>',c(2))}`)+
+      eq(`U<sub>a</sub> = ${fr(1,2)} × ${fr(n(Q1a)+'<sup>2</sup>',n(C1))} + ${fr(1,2)} × ${fr(n(Q2a)+'<sup>2</sup>',n(C2))} = ${vv(Ua)} ${J}`);
+    const uXsteps=(nm,Q,U)=>`<p class="step">الطاقة بعد الربط:</p>`+
+      eq(`U<sub>${nm}</sub> = ${fr(1,2)} ${fr(S('Q','total')+'<sup>2</sup>',ceqS)} = ${fr(1,2)} × ${fr(n(Q)+'<sup>2</sup>',n(Cp))} = ${vv(U)} ${J}`);
+
+    let h='', k=0;
+    const sec=t=>`<div class="sec">${++k}) ${t}</div>`;
+    if(sel.has('ceqa')){ h+=sec('السعة المكافئة للمجموعة في الشكل (a):')+ceqA()+`<div class="ans">${ceqS} = <span dir="ltr">${vv(Ca)} μF</span></div>`; }
+    if(sel.has('qa')){ h+=sec('الشحنة المختزنة في كل متسعة في الشكل (a):')+ (sel.has('ceqa')?'':'')+needA()+
+      `<div class="ans" dir="ltr">Q₁ = ${vv(Q1a)} μC &nbsp; ، &nbsp; Q₂ = ${vv(Q2a)} μC</div>`; }
+    if(sel.has('ua')){ h+=sec('الطاقة الكلية المختزنة في الشكل (a):')+needA()+uAsteps()+`<div class="ans">U<sub>a</sub> = ${Us(Ua)}</div>`; }
+    if(sel.has('qb')){ h+=sec('الشحنة المختزنة في أي من صفيحتي كل متسعة في الشكل (b):')+needB()+
+      `<div class="ans" dir="ltr">Q<sub>1</sub> = ${vv(Q1b)} μC &nbsp; ، &nbsp; Q<sub>2</sub> = ${vv(Q2b)} μC</div>`; }
+    if(sel.has('vb')){ h+=sec('فرق الجهد بين صفيحتي كل متسعة في الشكل (b):')+needB()+`<div class="ans dv-ans" dir="ltr">ΔV = ${vv(Vb)} V</div>`; }
+    if(sel.has('ub')){ h+=sec('الطاقة الكلية المختزنة في الشكل (b):')+needB()+uXsteps('b',Qb,Ub)+`<div class="ans">U<sub>b</sub> = ${Us(Ub)}</div>`; }
+    if(sel.has('lb')){ h+=sec('الطاقة المفقودة عند الانتقال من (a) إلى (b):')+needB()+uAsteps()+uXsteps('b',Qb,Ub)+
+      eq(`ΔU = U<sub>a</sub> − U<sub>b</sub> = ${n(Ua)} − ${n(Ub)} = ${vv(Ua-Ub)} ${J}`)+`<div class="ans">ΔU = ${Us(Ua-Ub)}</div>`; }
+    if(sel.has('qc')){ h+=sec('الشحنة المختزنة في أي من صفيحتي كل متسعة في الشكل (c):')+needC()+
+      `<div class="ans" dir="ltr">Q<sub>1</sub> = ${vv(Q1c)} μC &nbsp; ، &nbsp; Q<sub>2</sub> = ${vv(Q2c)} μC</div>`; }
+    if(sel.has('vc')){ h+=sec('فرق الجهد بين صفيحتي كل متسعة في الشكل (c):')+needC()+`<div class="ans dv-ans" dir="ltr">ΔV = ${vv(Vc)} V</div>`; }
+    if(sel.has('uc')){ h+=sec('الطاقة الكلية المختزنة في الشكل (c):')+needC()+uXsteps('c',Qc,Uc)+`<div class="ans">U<sub>c</sub> = ${Us(Uc)}</div>`; }
+    if(sel.has('lc')){ h+=sec('الطاقة المفقودة عند الانتقال من (a) إلى (c):')+needC()+uAsteps()+uXsteps('c',Qc,Uc)+
+      eq(`ΔU = U<sub>a</sub> − U<sub>c</sub> = ${n(Ua)} − ${n(Uc)} = ${vv(Ua-Uc)} ${J}`)+`<div class="ans">ΔU = ${Us(Ua-Uc)}</div>`; }
+    if(sel.has('cust') && v.cust){
+      const {q,c:cc,s:st}=v.cust;
+      h+=sec(custText()+':');
+      const S3={a:{Q:[Q1a,Q2a],Vg:V,Qg:(conn==='p'?Qb:Q1a),Cg:Ca,U:Ua},
+                b:{Q:[Q1b,Q2b],Vg:Vb,Qg:Qb,Cg:Cp,U:Ub},
+                c:{Q:[Q1c,Q2c],Vg:Vc,Qg:Qc,Cg:Cp,U:Uc}}[st];
+      const Cs=[C1,C2];
+      if(q==='L'){
+        if(st==='a'){ h+=`<p class="step">في الشكل (a) لا يوجد انتقال، فلا توجد طاقة مفقودة.</p>`; }
+        else{
+          const Ux=st==='b'?Ub:Uc, Qx=st==='b'?Qb:Qc;
+          h+=(st==='b'?needB():needC())+uAsteps()+uXsteps(st,Qx,Ux)+
+            eq(`ΔU = U<sub>a</sub> − U<sub>${st}</sub> = ${n(Ua)} − ${n(Ux)} = ${vv(Ua-Ux)} ${J}`)+`<div class="ans">ΔU = ${Us(Ua-Ux)}</div>`;
+        }
+      }else{
+        h+= st==='a'?needA():(st==='b'?needB():needC());
+        if(q==='Q'){
+          if(cc==='g') h+=`<div class="ans" dir="ltr">Q<sub>total</sub> = ${vv(S3.Qg)} μC</div>`;
+          else h+=`<div class="ans" dir="ltr">Q<sub>${cc}</sub> = ${vv(S3.Q[cc-1])} μC</div>`;
+        }else if(q==='V'){
+          if(cc==='g') h+=`<div class="ans dv-ans" dir="ltr">ΔV = ${vv(S3.Vg)} V</div>`;
+          else h+=eq(`ΔV<sub>${cc}</sub> = ${fr(S('Q',cc),c(cc))} = ${fr(n(S3.Q[cc-1]),n(Cs[cc-1]))} = ${vv(S3.Q[cc-1]/Cs[cc-1])} V`)+
+                  `<div class="ans dv-ans" dir="ltr">ΔV<sub>${cc}</sub> = ${vv(S3.Q[cc-1]/Cs[cc-1])} V</div>`;
+        }else if(q==='U'){
+          if(cc==='g'){
+            if(st==='a') h+=uAsteps(); else h+=uXsteps(st,S3.Qg,S3.U);
+            h+=`<div class="ans">U = ${Us(S3.U)}</div>`;
+          }else{
+            const Qi=S3.Q[cc-1], Ci=Cs[cc-1];
+            h+=eq(`PE<sub>${cc}</sub> = ${fr(1,2)} ${fr(S('Q',cc)+'<sup>2</sup>',c(cc))} = ${fr(1,2)} × ${fr(n(Qi)+'<sup>2</sup>',n(Ci))} = ${vv(0.5*Qi*Qi/Ci)} ${J}`)+
+               `<div class="ans">PE<sub>${cc}</sub> = ${Us(0.5*Qi*Qi/Ci)}</div>`;
+          }
+        }
+      }
+    }
+    return h;
+  }
+}
+,{
+  id:'c6',
+  name:'سؤال رقم (6)',
+  reqLead:'احسب', reqEnd:'.',
+  question(v){
+    const first = v.conn==='p' ? 'على التوازي' : 'على التوالي';
+    const same  = v.rc==='o' ? 'المختلفة الشحنة' : 'المتماثلة الشحنة';
+    return `متسعتان ربطتا ${first} مع بعضهما (<b>C<sub>1</sub> = ${displayValue('C1',v.C1)} ${getUnit('C1')}</b> ، <b>C<sub>2</sub> = ${displayValue('C2',v.C2)} ${getUnit('C2')}</b>) ثم ربطت مجموعتهما بين قطبي بطارية فرق الجهد بين قطبيها (<b>${displayValue('V',v.V)} ${getUnit('V')}</b>). فإذا فصلت المتسعتان عن بعضهما وعن البطارية دون حدوث ضياع في الطاقة، ثم أُعيد ربطهما مع بعض على التوازي بحيث إن الصفائح ${same} مربوطة مع بعضها.`;
+  },
+  cust:{
+    q:[['Q','الشحنة المختزنة'],['V','فرق الجهد'],['U','الطاقة المختزنة'],['C','السعة المكافئة'],['L','الطاقة المفقودة بعد إعادة الربط']],
+    c:[['1','المتسعة C₁'],['2','المتسعة C₂'],['g','المجموعة (المتسعتان معًا)']],
+    s:[['a','قبل الفصل'],['b','بعد إعادة الربط']],
+    d:['Q','1','b'],
+    text:(q,c,st)=>{
+      const sn= st==='a' ? 'قبل الفصل' : 'بعد إعادة الربط', ci=`المتسعة C<sub>${c}</sub>`;
+      if(q==='L') return 'الطاقة المفقودة بعد إعادة الربط';
+      if(q==='C') return c==='g' ? `السعة المكافئة للمجموعة ${sn}` : `سعة ${ci}`;
+      if(q==='Q') return c==='g' ? `الشحنة الكلية المختزنة في المجموعة ${sn}` : `الشحنة المختزنة في أي من صفيحتي ${ci} ${sn}`;
+      if(q==='V') return c==='g' ? `فرق الجهد بين طرفي المجموعة ${sn}` : `فرق الجهد بين صفيحتي ${ci} ${sn}`;
+      return c==='g' ? `الطاقة الكلية المختزنة في المجموعة ${sn}` : `الطاقة المختزنة في المجال الكهربائي بين صفيحتي ${ci} ${sn}`;
+    }
+  },
+  fields:[
+    {k:'C1', label:S('C',1), u:'μF', units:'cap', d:6},
+    {k:'C2', label:S('C',2), u:'μF', units:'cap', d:3},
+    {k:'V',  label:'ΔV',    u:'V',  units:'volt', d:90},
+    {k:'conn', label:'الربط الأول بالبطارية', type:'select', d:'s', options:[['s','على التوالي'],['p','على التوازي']]},
+    {k:'rc', label:'إعادة الربط', type:'select', d:'l', options:[['l','الصفائح المتماثلة الشحنة معًا (كما في السؤال)'],['o','الصفائح المختلفة الشحنة معًا']]}
+  ],
+  reqs:[
+    {id:'ceq1', def:false, text:'السعة المكافئة للمجموعة قبل الفصل'},
+    {id:'qa',   def:false, text:'الشحنة المختزنة في أي من صفيحتي كل متسعة قبل الفصل'},
+    {id:'ua',   def:false, text:'الطاقة الكلية المختزنة في المجموعة قبل الفصل'},
+    {id:'qb',   text:'مقدار الشحنة المختزنة في أي من صفيحتي كل متسعة بعد إعادة الربط'},
+    {id:'ceq2', def:false, text:'السعة المكافئة للمجموعة بعد إعادة الربط'},
+    {id:'qt2',  def:false, text:'الشحنة الكلية المختزنة في المجموعة بعد إعادة الربط'},
+    {id:'vb',   def:false, text:'فرق الجهد بين صفيحتي كل متسعة بعد إعادة الربط'},
+    {id:'ub',   def:false, text:'الطاقة الكلية المختزنة في المجموعة بعد إعادة الربط'},
+    {id:'lb',   def:false, text:'الطاقة المفقودة بعد إعادة الربط'},
+    {id:'cust', def:false, custom:true, text:'مطلوب مخصص'}
+  ],
+
+  // الرسم غير معطى في السؤال: يُرسم حسب المعطيات (نفس رسم الدائرة 5 بدون الشكل c)
+  svg(v){
+    const base=CIRCUITS.find(x=>x.id==='c5');
+    return base.svg(Object.assign({},v,{_opt:{noC:true, note:'هذه الدائرة غير معطاة في السؤال (مرسومة حسب المعطيات)', names:['قبل الفصل','بعد إعادة الربط'], revB:v.rc==='o'}}));
+  },
+
+  solve(v, sel, method=seriesMethod){
+    const {C1,C2,V}=v, conn=v.conn, opp=(v.rc==='o');
+    const c=i=>S('C',i), ceqS=S('C','eq'), Cp=C1+C2;
+    const Ca = conn==='p' ? Cp : ser2(C1,C2,method);
+    const Q1a = conn==='p' ? C1*V : Ca*V;
+    const Q2a = conn==='p' ? C2*V : Ca*V;
+    const Qa = conn==='p' ? Q1a+Q2a : Q1a;
+    const Ua = 0.5*Q1a*Q1a/C1 + 0.5*Q2a*Q2a/C2;
+    const Qb = opp ? Math.abs(Q1a-Q2a) : Q1a+Q2a;
+    const Vb=Qb/Cp, Q1b=C1*Vb, Q2b=C2*Vb, Ub=0.5*Qb*Qb/Cp;
+    const J='× 10<sup>-6</sup> J';
+    const Us=x=>`<span dir="ltr">${vv(x)} ${J}</span>`;
+
+    const ceqA=()=> conn==='p'
+      ? `<p class="step">المتسعتان مربوطتان على <b>التوازي</b> مع البطارية:</p>`+eq(`${ceqS} = ${c(1)} + ${c(2)}`)+eq(`${ceqS} = ${n(C1)} + ${n(C2)} = ${vv(Ca)} μF`)
+      : `<p class="step">المتسعتان مربوطتان على <b>التوالي</b>:</p>`+
+        (method==='product'
+          ? eq(`${ceqS} = ${fr(c(1)+' × '+c(2),c(1)+' + '+c(2))}`)+eq(`${ceqS} = ${fr(n(C1)+' × '+n(C2),n(C1)+' + '+n(C2))} = ${vv(Ca)} μF`)
+          : eq(`${fr('1',ceqS)} = ${fr('1',c(1))} + ${fr('1',c(2))}`)+
+            eq(`${fr('1',ceqS)} = ${fr('1',n(C1))} + ${fr('1',n(C2))} = ${fr(n(C1+C2),n(C1*C2))}`)+
+            eq(`${ceqS} = ${fr('1', fr(n(C1+C2), n(C1*C2)))}`)+eq(`${ceqS} = ${fr(n(C1*C2), n(C1+C2))} = ${vv(Ca)} μF`)) +
+        eq(`${ceqS} = ${vv(Ca)} μF`);
+    const qA=()=> conn==='p'
+      ? `<p class="step">على التوازي فرق الجهد على كل متسعة يساوي فرق الجهد الكلي:</p>`+
+        eq(`${S('Q',1)} = ${c(1)} × ΔV = ${n(C1)} × ${n(V)} = ${vv(Q1a)} μC`)+
+        eq(`${S('Q',2)} = ${c(2)} × ΔV = ${n(C2)} × ${n(V)} = ${vv(Q2a)} μC`)
+      : `<p class="step">الشحنة الكلية للمجموعة:</p>`+
+        eq(`${S('Q','t')} = ${ceqS} × ΔV<sub>t</sub> = ${n(Ca)} × ${n(V)} = ${vv(Q1a)} μC`)+
+        `<p class="step">على التوالي تكون شحنة المتسعتين متساوية وتساوي الشحنة الكلية:</p>`+
+        eq(`${S('Q','t')} = ${S('Q',1)} = ${S('Q',2)} = ${vv(Q1a)} μC`);
+    let A=false; const needA=()=>{ if(A) return ''; A=true;
+      return `<p class="step"><b>قبل الفصل:</b></p>`+(sel.has('ceq1')?'':ceqA())+qA(); };
+    const afterTop = opp
+      ? `<p class="step"><b>بعد إعادة الربط:</b> الصفائح المختلفة الشحنة مربوطة مع بعضها، فتلغي الشحنات بعضها ويبقى الفرق بينهما:</p>`+
+        eq(`${S('Q','t')} = |${S('Q',1)} − ${S('Q',2)}| = |${n(Q1a)} − ${n(Q2a)}| = ${vv(Qb)} μC`)
+      : `<p class="step"><b>بعد إعادة الربط:</b> الصفائح المتماثلة الشحنة مربوطة مع بعضها (توازي)، فتتجمع الشحنات:</p>`+
+        eq(`${S('Q','t')} = ${S('Q',1)} + ${S('Q',2)} = ${n(Q1a)} + ${n(Q2a)} = ${vv(Qb)} μC`);
+    const ceqB=()=>`<p class="step">السعة المكافئة على التوازي:</p>`+
+        eq(`${ceqS} = ${c(1)} + ${c(2)}`)+eq(`${ceqS} = ${n(C1)} + ${n(C2)} = ${vv(Cp)} μF`);
+    let B=false; const needB=()=>{ if(B) return ''; B=true;
+      return needA()+afterTop+ceqB()+
+        `<p class="step">فرق الجهد المشترك بين صفيحتي كل متسعة:</p>`+
+        eq(`ΔV<sub>t</sub> = ${fr(S('Q','t'),ceqS)} = ${fr(n(Qb),n(Cp))} = ${vv(Vb)} V`)+
+        eq(`ΔV<sub>t</sub> = ΔV<sub>1</sub> = ΔV<sub>2</sub> = ${vv(Vb)} V`)+
+        eq(`${S('Q',1)} = ${c(1)} × ΔV<sub>1</sub> = ${n(C1)} × ${n(Vb)} = ${vv(Q1b)} μC`)+
+        eq(`${S('Q',2)} = ${c(2)} × ΔV<sub>2</sub> = ${n(C2)} × ${n(Vb)} = ${vv(Q2b)} μC`); };
+    const uAsteps=()=>`<p class="step">الطاقة قبل الفصل (مجموع طاقتي المتسعتين):</p>`+
+      eq(`U<sub>1</sub> = ${fr(1,2)} × ${fr(n(Q1a)+'<sup>2</sup>',n(C1))} = ${vv(0.5*Q1a*Q1a/C1)} ${J}`)+
+      eq(`U<sub>2</sub> = ${fr(1,2)} × ${fr(n(Q2a)+'<sup>2</sup>',n(C2))} = ${vv(0.5*Q2a*Q2a/C2)} ${J}`)+
+      eq(`U<sub>قبل</sub> = ${vv(0.5*Q1a*Q1a/C1)} + ${vv(0.5*Q2a*Q2a/C2)} = ${vv(Ua)} ${J}`);
+    const uBsteps=()=>`<p class="step">الطاقة بعد إعادة الربط:</p>`+
+      eq(`U<sub>بعد</sub> = ${fr(1,2)} ${fr(S('Q','t')+'<sup>2</sup>',ceqS)} = ${fr(1,2)} × ${fr(n(Qb)+'<sup>2</sup>',n(Cp))} = ${vv(Ub)} ${J}`);
+
+    let h='', k=0;
+    const sec=t=>`<div class="sec">${++k}) ${t}</div>`;
+    if(sel.has('ceq1')){ h+=sec('السعة المكافئة للمجموعة قبل الفصل:')+ceqA()+`<div class="ans">${ceqS} = <span dir="ltr">${vv(Ca)} μF</span></div>`; }
+    if(sel.has('qa')){ h+=sec('الشحنة المختزنة في أي من صفيحتي كل متسعة قبل الفصل:')+needA()+
+      `<div class="ans" dir="ltr">Q₁ = ${vv(Q1a)} μC &nbsp; ، &nbsp; Q₂ = ${vv(Q2a)} μC</div>`; }
+    if(sel.has('ua')){ h+=sec('الطاقة الكلية المختزنة في المجموعة قبل الفصل:')+needA()+uAsteps()+`<div class="ans">U = ${Us(Ua)}</div>`; }
+    if(sel.has('qb')){ h+=sec('مقدار الشحنة المختزنة في أي من صفيحتي كل متسعة بعد إعادة الربط:')+needB()+
+      `<div class="ans" dir="ltr">Q₁ = ${vv(Q1b)} μC &nbsp; ، &nbsp; Q₂ = ${vv(Q2b)} μC</div>`; }
+    if(sel.has('ceq2')){ h+=sec('السعة المكافئة للمجموعة بعد إعادة الربط:')+ceqB()+`<div class="ans">${ceqS} = <span dir="ltr">${vv(Cp)} μF</span></div>`; }
+    if(sel.has('qt2')){ h+=sec('الشحنة الكلية المختزنة في المجموعة بعد إعادة الربط:')+needA()+afterTop+`<div class="ans">${S('Q','t')} = <span dir="ltr">${vv(Qb)} μC</span></div>`; }
+    if(sel.has('vb')){ h+=sec('فرق الجهد بين صفيحتي كل متسعة بعد إعادة الربط:')+needB()+`<div class="ans dv-ans" dir="ltr">ΔV = ${vv(Vb)} V</div>`; }
+    if(sel.has('ub')){ h+=sec('الطاقة الكلية المختزنة في المجموعة بعد إعادة الربط:')+needB()+uBsteps()+`<div class="ans">U = ${Us(Ub)}</div>`; }
+    if(sel.has('lb')){ h+=sec('الطاقة المفقودة بعد إعادة الربط:')+needB()+uAsteps()+uBsteps()+
+      eq(`ΔU = U<sub>قبل</sub> − U<sub>بعد</sub> = ${n(Ua)} − ${n(Ub)} = ${vv(Ua-Ub)} ${J}`)+`<div class="ans">ΔU = ${Us(Ua-Ub)}</div>`; }
+    if(sel.has('cust') && v.cust){
+      const {q,c:cc,s:st}=v.cust;
+      h+=sec(custText()+':');
+      const D={a:{Q:[Q1a,Q2a],Vg:V,Qg:Qa,Cg:Ca,U:Ua}, b:{Q:[Q1b,Q2b],Vg:Vb,Qg:Qb,Cg:Cp,U:Ub}}[st];
+      const Cs=[C1,C2], i=Number(cc);
+      if(q==='L'){
+        h+=needB()+uAsteps()+uBsteps()+eq(`ΔU = ${n(Ua)} − ${n(Ub)} = ${vv(Ua-Ub)} ${J}`)+`<div class="ans">ΔU = ${Us(Ua-Ub)}</div>`;
+      }else if(q==='C'){
+        if(cc==='g') h+=(st==='a'?ceqA():ceqB())+`<div class="ans">${ceqS} = <span dir="ltr">${vv(D.Cg)} μF</span></div>`;
+        else h+=`<div class="ans">${c(i)} = <span dir="ltr">${n(Cs[i-1])} μF</span></div>`;
+      }else{
+        h+= st==='a'?needA():needB();
+        if(q==='Q'){
+          h+= cc==='g' ? `<div class="ans" dir="ltr">Q<sub>t</sub> = ${vv(D.Qg)} μC</div>` : `<div class="ans" dir="ltr">Q<sub>${cc}</sub> = ${vv(D.Q[i-1])} μC</div>`;
+        }else if(q==='V'){
+          if(cc==='g') h+=`<div class="ans dv-ans" dir="ltr">ΔV = ${vv(D.Vg)} V</div>`;
+          else h+=eq(`ΔV<sub>${cc}</sub> = ${fr(S('Q',cc),c(cc))} = ${fr(n(D.Q[i-1]),n(Cs[i-1]))} = ${vv(D.Q[i-1]/Cs[i-1])} V`)+
+                  `<div class="ans dv-ans" dir="ltr">ΔV<sub>${cc}</sub> = ${vv(D.Q[i-1]/Cs[i-1])} V</div>`;
+        }else if(q==='U'){
+          if(cc==='g'){ h+= (st==='a'?uAsteps():uBsteps())+`<div class="ans">U = ${Us(D.U)}</div>`; }
+          else{ const Qi=D.Q[i-1], Ci=Cs[i-1];
+            h+=eq(`U<sub>${cc}</sub> = ${fr(1,2)} ${fr(S('Q',cc)+'<sup>2</sup>',c(cc))} = ${fr(1,2)} × ${fr(n(Qi)+'<sup>2</sup>',n(Ci))} = ${vv(0.5*Qi*Qi/Ci)} ${J}`)+
+               `<div class="ans">U<sub>${cc}</sub> = ${Us(0.5*Qi*Qi/Ci)}</div>`; }
+        }
+      }
+    }
+    return h;
+  }
+}
+,{
+  id:'c7',
+  name:'سؤال رقم (7)',
+  reqLead:'ما مقدار', reqEnd:'؟',
+
+  /* نص السؤال (يتغير مباشرة مع المعطيات) */
+  question(v){
+    const ord={1:'الأولى',2:'الثانية',3:'الثالثة'}[v.dp];
+    return `متسعات رُبطت مع بعضها كما في الشكل، رُبطت المجموعة بين قطبي بطارية فرق الجهد بين قطبيها (<b>${displayValue('V',v.V)} ${getUnit('V')}</b>). أُدخل لوح من مادة عازلة ثابت عزلها (K) بين صفيحتي المتسعة ${ord} (<b>C<sub>${v.dp}</sub></b>) والمجموعة ما زالت متصلة بالبطارية، وكانت الشحنة الكلية للمجموعة (<b>${displayValue('Qt',v.Qt)} ${getUnit('Qt')}</b>).`;
+  },
+
+  cust:{
+    q:[['Q','الشحنة المختزنة'],['V','فرق الجهد'],['U','الطاقة المختزنة'],['C','السعة']],
+    c:[['1','المتسعة C₁'],['2','المتسعة C₂'],['3','المتسعة C₃'],['g','المجموعة كاملة']],
+    s:[['a','قبل إدخال العازل'],['b','بعد إدخال العازل']],
+    d:['Q','1','b'],
+    text:(q,c,st)=>{
+      const sn= st==='a' ? 'قبل إدخال العازل' : 'بعد إدخال العازل', ci=`المتسعة C<sub>${c}</sub>`;
+      if(q==='C') return c==='g' ? `السعة المكافئة للمجموعة ${sn}` : `سعة ${ci} ${sn}`;
+      if(q==='Q') return c==='g' ? `الشحنة الكلية المختزنة في المجموعة ${sn}` : `الشحنة المختزنة في أي من صفيحتي ${ci} ${sn}`;
+      if(q==='V') return c==='g' ? `فرق الجهد بين طرفي المجموعة ${sn}` : `فرق الجهد بين صفيحتي ${ci} ${sn}`;
+      return c==='g' ? `الطاقة الكلية المختزنة في المجموعة ${sn}` : `الطاقة المختزنة في المجال الكهربائي بين صفيحتي ${ci} ${sn}`;
+    }
+  },
+
+  fields:[
+    {k:'C1', label:S('C',1), u:'μF', units:'cap', d:9},
+    {k:'C2', label:S('C',2), u:'μF', units:'cap', d:18},
+    {k:'C3', label:S('C',3), u:'μF', units:'cap', d:4},
+    {k:'V',  label:'ΔV',    u:'V',  units:'volt', d:24},
+    {k:'Qt', label:S('Q','total') + ' (بعد إدخال العازل)', u:'μC', units:'charge', d:336},
+    {k:'dp', label:'مكان إدخال العازل', type:'select', d:'3', options:[['1','المتسعة الأولى C₁'],['2','المتسعة الثانية C₂'],['3','المتسعة الثالثة C₃']]}
+  ],
+
+  reqs:[
+    {id:'k',   text:'ثابت العزل (K)'},
+    {id:'qs',  text:'الشحنة المختزنة في أي من صفيحتي كل متسعة بعد إدخال العازل'},
+    {id:'ceq', def:false, text:'السعة المكافئة للمجموعة بعد إدخال العازل'},
+    {id:'ck',  def:false, text:'سعة المتسعة التي أُدخل فيها العازل بعد إدخاله'},
+    {id:'dv',  def:false, text:'فرق الجهد بين صفيحتي كل متسعة بعد إدخال العازل'},
+    {id:'cust',def:false, custom:true, text:'مطلوب مخصص'}
+  ],
+
+  /* ---------- الرسم ---------- */
+  svg(v){
+    const ink='#16233b', batt='#6942bb', col={1:'#e34b3f',2:'#15946b',3:'#2d6fd0'}, p=Number(v.dp);
+    const wire='stroke="#52657d" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"';
+    const cap=(x,y,i)=>{
+      let s=`<line x1="${x-9}" y1="${y-26}" x2="${x-9}" y2="${y+26}" stroke="${col[i]}" stroke-width="4" stroke-linecap="round"/><line x1="${x+9}" y1="${y-26}" x2="${x+9}" y2="${y+26}" stroke="${col[i]}" stroke-width="4" stroke-linecap="round"/>`;
+      if(i===p) s+=`<rect x="${x-7}" y="${y-24}" width="14" height="48" fill="#f5a623" fill-opacity=".5" stroke="#d98a0c" stroke-width="1.5" stroke-dasharray="4 3"/><text x="${x}" y="${y+48}" text-anchor="middle" font-size="15" fill="#b56e00" font-weight="900">عازل K</text>`;
+      return s;
+    };
+    const lab=(x,y,i)=>`<text x="${x}" y="${y}" text-anchor="middle" font-size="15" fill="${col[i]}" direction="ltr" font-weight="800">C<tspan font-size="10" dy="4">${i}</tspan><tspan dy="-4"> = ${displayValue('C'+i,v['C'+i])} ${getUnit('C'+i)}</tspan></text>`;
+    let s='<svg viewBox="0 0 520 330" role="img" aria-label="رسم السؤال 7" xmlns="http://www.w3.org/2000/svg">';
+    s+=`<path ${wire} fill="none" d="M100 70H161 M179 70H341 M359 70H420 M100 150H251 M269 150H420 M100 70V250 M420 70V250 M100 250H252 M268 250H420"/>`;
+    s+=cap(170,70,1)+cap(350,70,2)+cap(260,150,3);
+    [[100,150],[420,150]].forEach(q=>{s+=`<circle cx="${q[0]}" cy="${q[1]}" r="4.5" fill="${ink}"/>`});
+    s+=lab(170,32,1)+lab(350,32,2)+lab(260,112,3);
+    // البطارية: الصفيحة الطويلة (+) على اليسار
+    s+=`<line x1="252" y1="226" x2="252" y2="274" stroke="${batt}" stroke-width="4" stroke-linecap="round"/><line x1="268" y1="237" x2="268" y2="263" stroke="${batt}" stroke-width="6" stroke-linecap="round"/>`;
+    s+=`<text x="234" y="236" font-size="18" fill="${batt}" text-anchor="middle" font-weight="900">+</text><text x="288" y="240" font-size="20" fill="${batt}" text-anchor="middle" font-weight="900">−</text>`;
+    s+=`<text x="260" y="302" font-size="16" fill="${batt}" text-anchor="middle" direction="ltr" font-weight="800">ΔV = ${displayValue('V',v.V)} ${getUnit('V')}</text>`;
+    s+=`<text x="260" y="322" font-size="14" fill="${ink}" text-anchor="middle" direction="ltr" font-weight="700">Q<tspan font-size="10" dy="4">total</tspan><tspan dy="-4"> = ${displayValue('Qt',v.Qt)} ${getUnit('Qt')}</tspan></text>`;
+    s+='</svg>';
+    return s;
+  },
+
+  /* ---------- الحل ---------- */
+  solve(v, sel, method=seriesMethod){
+    const {C1,C2,C3,V,Qt}=v, p=Number(v.dp), Cin=[C1,C2,C3];
+    const c=i=>S('C',i), ck=i=>S('C',i+'K'), ceqS=S('C','eq'), ceqN=S('C','eq2');
+    const Cs=ser2(C1,C2,method), Ceq2=Qt/V, Cn=Cin[p-1];
+    let Cs2, Ckv, C3n;
+    if(p===3){ Cs2=Cs; Ckv=Ceq2-Cs; C3n=Ckv; }
+    else{ Cs2=Ceq2-C3; const O=(p===1?C2:C1); Ckv=(Cs2>0 && O-Cs2>1e-12)? Cs2*O/(O-Cs2) : NaN; C3n=C3; }
+    const K=Ckv/Cn;
+    if(!isFinite(K) || K<=0){
+      return `<div class="err">القيم المدخلة غير ممكنة فيزيائيًا مع هذا الموضع للعازل (لا يوجد ثابت عزل موجب يحقق الشحنة الكلية المعطاة). غيّر الشحنة الكلية أو موضع العازل أو السعات.</div>`;
+    }
+    const warn = K<1-1e-9 ? `<div class="err">تنبيه: ثابت العزل الناتج (${vv(K)}) أقل من 1، وهذا غير ممكن لمادة عازلة. راجع القيم المدخلة.</div>` : '';
+    const Cnew=[C1,C2,C3]; Cnew[p-1]=Ckv;
+    const Qb=Cs2*V, Q3n=C3n*V;
+    const Qafter=[Qb,Qb,Q3n], Vafter=[Qb/Cnew[0],Qb/Cnew[1],Q3n/Cnew[2]];
+    const Qs=Cs*V, Q3a=C3*V, Ca=Cs+C3;
+    const A={C:[C1,C2,C3], Q:[Qs,Qs,Q3a], Vc:[Qs/C1,Qs/C2,V], Cg:Ca, Qg:Ca*V};
+    const B={C:Cnew, Q:Qafter, Vc:Vafter, Cg:Ceq2, Qg:Qt};
+    const J='× 10<sup>-6</sup> J', Us=x=>`<span dir="ltr">${vv(x)} ${J}</span>`;
+    const dvTxt=`${displayValue('V',V)} ${getUnit('V')}`;
+
+    const serH=(na,nb,a,b,sym,res)=>{
+      let h='';
+      if(method==='product'){
+        h+=eq(`${sym} = ${fr(na+' × '+nb, na+' + '+nb)}`);
+        h+=eq(`${sym} = ${fr(n(a)+' × '+n(b), n(a)+' + '+n(b))} = ${vv(res)} μF`);
+      }else{
+        h+=eq(`${fr('1',sym)} = ${fr('1',na)} + ${fr('1',nb)}`);
+        h+=eq(`${fr('1',sym)} = ${fr('1',n(a))} + ${fr('1',n(b))} = ${fr(n(a+b),n(a*b))}`);
+        h+=eq(`${sym} = ${fr('1', fr(n(a+b), n(a*b)))}`)+eq(`${sym} = ${fr(n(a*b), n(a+b))} = ${vv(res)} μF`);
+      }
+      return h;
+    };
+
+    let sh1=false, sh2=false, shA=false;
+    // السعة المكافئة بعد إدخال العازل + سعات الفرعين
+    const core1=()=>{ if(sh1) return ''; sh1=true;
+      let h=`<p class="step">المجموعة ما زالت متصلة بالبطارية، لذلك يبقى فرق الجهد الكلي ثابتًا (ΔV = ${dvTxt}). نحسب السعة المكافئة للمجموعة بعد إدخال العازل:</p>`;
+      h+=eq(`${ceqN} = ${fr(S('Q','total'),'ΔV')} = ${fr(n(Qt),n(V))} = ${vv(Ceq2)} μF`);
+      if(p===3){
+        h+=`<p class="step">المتسعتان ${c(1)} و${c(2)} على التوالي ولم يتغير فيهما شيء، نحسب سعتهما المكافئة ${S('C','12')}:</p>`+serH(c(1),c(2),C1,C2,S('C','12'),Cs);
+        h+=`<p class="step">المجموعة (${S('C','12')} ، ${ck(3)}) على التوازي:</p>`+
+          eq(`${ceqN} = ${S('C','12')} + ${ck(3)}`)+eq(`${n(Ceq2)} = ${n(Cs)} + ${ck(3)}`)+
+          eq(`${ck(3)} = ${n(Ceq2)} − ${n(Cs)} = ${vv(Ckv)} μF`);
+      }else{
+        h+=`<p class="step">المتسعة ${c(3)} لم يتغير فيها شيء، وهي على التوازي مع مجموعة التوالي (${c(1)} ، ${c(2)}) التي سعتها المكافئة ${S('C','12')}:</p>`+
+          eq(`${ceqN} = ${S('C','12')} + ${c(3)}`)+eq(`${n(Ceq2)} = ${S('C','12')} + ${n(C3)}`)+
+          eq(`${S('C','12')} = ${n(Ceq2)} − ${n(C3)} = ${vv(Cs2)} μF`);
+      }
+      return h;
+    };
+    // سعة المتسعة التي فيها العازل (عندما يكون في C1 أو C2)
+    const core2=()=>{ if(sh2||p===3) return ''; sh2=true;
+      const O=(p===1?C2:C1), oi=(p===1?2:1);
+      let h=`<p class="step">المتسعتان ${c(1)} و${c(2)} على التوالي، والعازل في ${c(p)} فتصبح سعتها ${ck(p)}. نجدها من السعة المكافئة ${S('C','12')} = ${vv(Cs2)} μF:</p>`;
+      if(method==='product'){
+        h+=eq(`${S('C','12')} = ${fr(ck(p)+' × '+c(oi), ck(p)+' + '+c(oi))}`);
+        h+=eq(`${n(Cs2)} = ${fr(ck(p)+' × '+n(O), ck(p)+' + '+n(O))}`);
+        h+=eq(`${ck(p)} = ${fr(n(Cs2)+' × '+n(O), n(O)+' − '+n(Cs2))} = ${vv(Ckv)} μF`);
+      }else{
+        h+=eq(`${fr('1',S('C','12'))} = ${fr('1',ck(p))} + ${fr('1',c(oi))}`);
+        h+=eq(`${fr('1',ck(p))} = ${fr('1',n(Cs2))} − ${fr('1',n(O))} = ${fr(n(O-Cs2),n(Cs2*O))}`);
+        h+=eq(`${ck(p)} = ${fr(n(Cs2*O),n(O-Cs2))} = ${vv(Ckv)} μF`);
+      }
+      return h;
+    };
+    // الحالة قبل إدخال العازل
+    const coreA=()=>{ if(shA) return ''; shA=true;
+      return `<p class="step">قبل إدخال العازل، المتسعتان ${c(1)} و${c(2)} على التوالي:</p>`+serH(c(1),c(2),C1,C2,S('C','12'),Cs)+
+        `<p class="step">والمجموعة ${S('C','12')} على التوازي مع ${c(3)}:</p>`+
+        eq(`${ceqS} = ${S('C','12')} + ${c(3)} = ${n(Cs)} + ${n(C3)} = ${vv(Ca)} μF`)+
+        `<p class="step">الشحنة على كل فرع (ΔV = ${dvTxt}):</p>`+
+        eq(`${S('Q','12')} = ${S('C','12')} × ΔV = ${n(Cs)} × ${n(V)} = ${vv(Qs)} μC = ${S('Q',1)} = ${S('Q',2)}`)+
+        eq(`${S('Q',3)} = ${c(3)} × ΔV = ${n(C3)} × ${n(V)} = ${vv(Q3a)} μC`);
+    };
+    const c3n = p===3 ? ck(3) : c(3);
+    const qLines=()=>
+      `<p class="step">المتسعتان ${c(1)} و${c(2)} على التوالي فشحنتاهما متساوية وتساوي شحنة ${S('C','12')}، والمتسعة ${c3n} على التوازي معهما فيكون فرق الجهد عليها ΔV:</p>`+
+      eq(`${S('Q','12')} = ${S('C','12')} × ΔV = ${n(Cs2)} × ${n(V)} = ${vv(Qb)} μC = ${S('Q',1)} = ${S('Q',2)}`)+
+      eq(`${S('Q',3)} = ${c3n} × ΔV = ${n(C3n)} × ${n(V)} = ${vv(Q3n)} μC`);
+
+    let h=warn, k=0;
+    const sec=t=>`<div class="sec">${++k}) ${t}</div>`;
+
+    if(sel.has('k')){
+      h+=sec('ثابت العزل (K):')+core1()+core2()+
+        `<p class="step">سعة المتسعة ${c(p)} بعد إدخال العازل تساوي K مرة سعتها قبل إدخاله:</p>`+
+        eq(`${ck(p)} = K × ${c(p)}`)+
+        eq(`K = ${fr(ck(p),c(p))} = ${fr(n(Ckv),n(Cn))} = ${vv(K)}`)+
+        `<div class="ans">K = <span dir="ltr">${vv(K)}</span></div>`;
+    }
+    if(sel.has('qs')){
+      h+=sec('الشحنة المختزنة في أي من صفيحتي كل متسعة بعد إدخال العازل:')+core1()+qLines()+
+        `<p class="step">للتحقق: مجموع الشحنتين يساوي الشحنة الكلية:</p>`+
+        eq(`${S('Q','12')} + ${S('Q',3)} = ${n(Qb)} + ${n(Q3n)} = ${vv(Qb+Q3n)} μC = ${S('Q','total')}`)+
+        `<div class="ans" dir="ltr">Q₁ = Q₂ = ${vv(Qb)} μC &nbsp; ، &nbsp; Q₃ = ${vv(Q3n)} μC</div>`;
+    }
+    if(sel.has('ceq')){
+      h+=sec('السعة المكافئة للمجموعة بعد إدخال العازل:')+core1()+
+        `<div class="ans">${ceqN} = <span dir="ltr">${vv(Ceq2)} μF</span></div>`;
+    }
+    if(sel.has('ck')){
+      h+=sec('سعة المتسعة التي أُدخل فيها العازل بعد إدخاله:')+core1()+core2()+
+        `<div class="ans">${ck(p)} = <span dir="ltr">${vv(Ckv)} μF</span></div>`;
+    }
+    if(sel.has('dv')){
+      h+=sec('فرق الجهد بين صفيحتي كل متسعة بعد إدخال العازل:')+core1()+core2()+qLines()+
+        `<p class="step">نحسب فرق الجهد على كل متسعة من العلاقة ΔV = Q / C:</p>`+
+        [1,2,3].map(i=>{ const nmI=(i===p)?ck(i):c(i);
+          return eq(`ΔV<sub>${i}</sub> = ${fr(S('Q',i),nmI)} = ${fr(n(Qafter[i-1]),n(Cnew[i-1]))} = ${vv(Vafter[i-1])} V`); }).join('')+
+        `<div class="ans dv-ans" dir="ltr">ΔV₁ = ${vv(Vafter[0])} V &nbsp; ، &nbsp; ΔV₂ = ${vv(Vafter[1])} V &nbsp; ، &nbsp; ΔV₃ = ${vv(Vafter[2])} V</div>`;
+    }
+    if(sel.has('cust') && v.cust){
+      const {q,c:cc,s:stt}=v.cust, D=stt==='a'?A:B, i=Number(cc);
+      const nmI=(j)=> (stt==='b' && j===p) ? ck(j) : c(j);
+      h+=sec(custText()+':');
+      h+= stt==='a' ? coreA() : core1()+core2();
+      if(q==='C'){
+        h+= cc==='g' ? `<div class="ans">${ceqS} = <span dir="ltr">${vv(D.Cg)} μF</span></div>`
+                     : `<div class="ans">${nmI(i)} = <span dir="ltr">${vv(D.C[i-1])} μF</span></div>`;
+      }else if(q==='Q'){
+        h+= cc==='g' ? `<div class="ans" dir="ltr">Q<sub>total</sub> = ${vv(D.Qg)} μC</div>`
+                     : `<div class="ans" dir="ltr">Q<sub>${cc}</sub> = ${vv(D.Q[i-1])} μC</div>`;
+      }else if(q==='V'){
+        if(cc==='g') h+=`<div class="ans dv-ans" dir="ltr">ΔV = ${dvTxt}</div>`;
+        else h+=eq(`ΔV<sub>${cc}</sub> = ${fr(S('Q',cc),nmI(i))} = ${fr(n(D.Q[i-1]),n(D.C[i-1]))} = ${vv(D.Vc[i-1])} V`)+
+                `<div class="ans dv-ans" dir="ltr">ΔV<sub>${cc}</sub> = ${vv(D.Vc[i-1])} V</div>`;
+      }else{
+        if(cc==='g') h+=eq(`U = ${fr(1,2)} ${S('Q','total')} × ΔV = ${fr(1,2)} × ${n(D.Qg)} × ${n(V)} = ${vv(0.5*D.Qg*V)} ${J}`)+
+                        `<div class="ans">U = ${Us(0.5*D.Qg*V)}</div>`;
+        else{ const Qi=D.Q[i-1], Ci=D.C[i-1];
+          h+=eq(`U<sub>${cc}</sub> = ${fr(1,2)} ${fr(S('Q',cc)+'<sup>2</sup>',nmI(i))} = ${fr(1,2)} × ${fr(n(Qi)+'<sup>2</sup>',n(Ci))} = ${vv(0.5*Qi*Qi/Ci)} ${J}`)+
+             `<div class="ans">U<sub>${cc}</sub> = ${Us(0.5*Qi*Qi/Ci)}</div>`; }
+      }
+    }
+    return h;
+  }
+}
+];
+
+/* ============ الواجهة ============ */
+let cur = CIRCUITS[0];
+
+// قيم الحساب الداخلية: السعة بوحدة μF، والجهد بوحدة V.
+// لذلك تبقى الشحنات الناتجة مباشرة بوحدة μC.
+const UNIT_FACTORS = {
+  cap: { 'F':1e6, 'mF':1e3, 'μF':1, 'nF':1e-3, 'pF':1e-6 },
+  volt:{ 'V':1, 'mV':1e-3, 'kV':1e3 },
+  charge:{ 'C':1e6, 'mC':1e3, 'μC':1, 'nC':1e-3 }
+};
+
+function unitOptions(type, selected){
+  return Object.keys(UNIT_FACTORS[type]).map(u =>
+    `<option value="${u}" ${u===selected?'selected':''}>${u}</option>`
+  ).join('');
+}
+
+const inputDef = k => cur.fields.concat(cur.reqs.filter(r=>r.inp).map(r=>r.inp)).find(x=>x.k===k);
+function getUnit(k){
+  const el = $('u_'+k);
+  return el ? el.value : inputDef(k).u;
+}
+
+function toBase(k, value){
+  const f = inputDef(k);
+  return value * UNIT_FACTORS[f.units][getUnit(k)];
+}
+
+function displayValue(k, baseValue){
+  const f = inputDef(k);
+  const u = getUnit(k);
+  return n(baseValue / UNIT_FACTORS[f.units][u]);
+}
+
+function readVals(){
+  const v={}; let bad=null;
+  cur.fields.forEach(f=>{
+    if(f.type==='select'){ v[f.k]=$('f_'+f.k).value; return; }
+    const raw = $('f_'+f.k).value.trim().replace(',','.');
+    const x = parseFloat(raw);
+    if(!(x>0) || !isFinite(x)) bad = bad || f;
+    v[f.k]=toBase(f.k,x);
+  });
+  return {v,bad};
+}
+function currentVals(){           // قيم للمعاينة (تستخدم الافتراضي إذا الحقل فارغ)
+  const v={};
+  cur.fields.forEach(f=>{
+    if(f.type==='select'){ v[f.k]=$('f_'+f.k).value; return; }
+    const x=parseFloat($('f_'+f.k).value.replace(',','.'));
+    v[f.k]=(x>0&&isFinite(x)) ? toBase(f.k,x) : f.d * UNIT_FACTORS[f.units][f.u];
+  });
+  return v;
+}
+function drawPreview(){
+  const cv=currentVals();
+  $('preview').innerHTML = cur.svg(cv);
+  updateQuestion(cv);
+}
+function reqsListHTML(){
+  const items=cur.reqs.filter(r=>$('r_'+r.id) && $('r_'+r.id).checked).map(r=>reqHTML(r,false));
+  if(!items.length) return '';
+  const lead=cur.reqLead||'احسب', end=cur.reqEnd||'.';
+  const list = items.length===1 ? items[0] : items.slice(0,-1).join(' ، ') + ' و' + items[items.length-1];
+  return ` ${lead}: ${list}${end}`;
+}
+function updateQuestion(cv){
+  if(cur.question){ $('qCard').hidden=false; $('qText').innerHTML=cur.question(cv||currentVals())+reqsListHTML(); }
+  else $('qCard').hidden=true;
+}
+function updateInfo(){
+  const v=currentVals();
+  $('infoC1').textContent=`${displayValue('C1',v.C1)} ${getUnit('C1')}`;
+  $('infoC2').textContent=`${displayValue('C2',v.C2)} ${getUnit('C2')}`;
+  $('infoC3').textContent=cur.fields.some(f=>f.k==='C3') ? `${displayValue('C3',v.C3)} ${getUnit('C3')}` : '—';
+  $('infoC4').textContent=cur.fields.some(f=>f.k==='C4') ? `${displayValue('C4',v.C4)} ${getUnit('C4')}` : '—';
+  $('infoC5').textContent=cur.fields.some(f=>f.k==='C5') ? `${displayValue('C5',v.C5)} ${getUnit('C5')}` : '—';
+  $('infoV').textContent=cur.fields.some(f=>f.k==='V') ? `${displayValue('V',v.V)} ${getUnit('V')}` : '—';
+}
+
+const reqQ = r => {
+  const el = $('f_'+r.inp.k);
+  const x = el ? parseFloat(el.value.replace(',','.')) : r.inp.d;
+  const u = el ? getUnit(r.inp.k) : r.inp.u;
+  return `(${isFinite(x) ? n(x) : '؟'} ${u})`;
+};
+const custVal=(id,d)=>$(id)?$(id).value:d;
+function custText(){
+  const cd=cur.cust;
+  return cd.text(custVal('cu_q',cd.d[0]), custVal('cu_c',cd.d[1]), custVal('cu_s',cd.d[2]));
+}
+const reqHTML = (r,live) => r.custom
+  ? (live ? `<span class="qv" id="qv_cust">${custText()}</span>` : custText())
+  : r.inp
+  ? r.text.replace('{Q}', `<span class="qv"${live?` id="qv_${r.inp.k}"`:''}>${reqQ(r)}</span>`)
+  : r.text;
+function refreshReqText(){
+  cur.reqs.forEach(r=>{ if(r.inp){ const el=$('qv_'+r.inp.k); if(el) el.innerHTML=reqQ(r); } });
+  const ce=$('qv_cust'); if(ce) ce.innerHTML=custText();
+}
+
+function buildForm(){
+  $('previewTitle').textContent = cur.name;
+  $('headerBadge').textContent = cur.name;
+  $('vals').innerHTML = cur.fields.map(f=> f.type==='select'
+    ? `<div class="f"><label for="f_${f.k}">${f.label}</label><select id="f_${f.k}">${f.options.map(o=>`<option value="${o[0]}" ${o[0]===f.d?'selected':''}>${o[1]}</option>`).join('')}</select></div>`
+    : `<div class="f"><label for="f_${f.k}">${f.label}</label>
+     <div class="unit-row">
+       <input id="f_${f.k}" type="number" inputmode="decimal" step="any" min="0" value="${f.d}">
+       <select id="u_${f.k}" aria-label="وحدة ${f.label}">${unitOptions(f.units,f.u)}</select>
+     </div></div>`).join('');
+  $('reqs').innerHTML = cur.reqs.map((r,i)=>{
+    let html = `<label class="req"><input type="checkbox" id="r_${r.id}"><span><b>${i+1})</b> ${reqHTML(r,true)}</span></label>`;
+    if(r.inp) html += `<div class="req-inp unit-row"><input id="f_${r.inp.k}" type="number" inputmode="decimal" step="any" min="0" value="${r.inp.d}"><select id="u_${r.inp.k}" aria-label="وحدة ${r.inp.label}">${unitOptions(r.inp.units,r.inp.u)}</select></div>`;
+    if(r.custom){
+      const so=(arr,d)=>arr.map(o=>`<option value="${o[0]}" ${o[0]===d?'selected':''}>${o[1]}</option>`).join('');
+      html += `<div class="req-inp" style="display:grid;gap:6px"><select id="cu_q" aria-label="الكمية المطلوبة">${so(cur.cust.q,cur.cust.d[0])}</select><select id="cu_c" aria-label="المتسعة">${so(cur.cust.c,cur.cust.d[1])}</select><select id="cu_s" aria-label="الشكل">${so(cur.cust.s,cur.cust.d[2])}</select></div>`;
+    }
+    return `<div class="req-wrap">${html}</div>`;
+  }).join('');
+  cur.reqs.forEach(r=>{
+    if(r.custom){
+      ['cu_q','cu_c','cu_s'].forEach(id=>$(id).addEventListener('change',()=>{ $('r_cust').checked=true; refreshReqText(); }));
+    }
+    if(r.inp){
+      $('f_'+r.inp.k).addEventListener('input',refreshReqText);
+      $('u_'+r.inp.k).addEventListener('change',refreshReqText);
+    }
+  });
+  cur.fields.forEach(f=>{
+    if(f.type==='select'){ $('f_'+f.k).addEventListener('change',()=>{drawPreview();updateInfo();}); return; }
+    $('f_'+f.k).addEventListener('input',()=>{drawPreview();updateInfo();});
+    $('u_'+f.k).addEventListener('change',()=>{
+      const x=parseFloat($('f_'+f.k).value.replace(',','.'));
+      if(x>0&&isFinite(x)){
+        const base=x*UNIT_FACTORS[f.units][$('u_'+f.k).value];
+        $('f_'+f.k).value=displayValue(f.k,base);
+      }
+      drawPreview(); updateInfo();
+    });
+  });
+  $('err').innerHTML='';
+  drawPreview(); updateInfo(); refreshReqText();
+}
+
+let solved=false;
+function solveNow(auto){
+  $('err').innerHTML='';
+  const {v,bad}=readVals();
+  if(cur.cust && $('cu_q')) v.cust={q:$('cu_q').value,c:$('cu_c').value,s:$('cu_s').value};
+  if(bad){ $('err').innerHTML=`<div class="err">القيمة ${bad.label} لازم تكون رقم أكبر من صفر.</div>`; return; }
+  const sel=new Set(cur.reqs.filter(r=>$('r_'+r.id).checked).map(r=>r.id));
+  if(!sel.size){ $('err').innerHTML='<div class="err">اختار مطلوب واحد على الأقل.</div>'; return; }
+
+  const usesInp=r=>sel.has(r.id)||(r.inp.also||[]).some(id=>sel.has(id));
+  for(const r of cur.reqs){
+    if(r.inp && usesInp(r)){
+      const x=parseFloat($('f_'+r.inp.k).value.trim().replace(',','.'));
+      if(!(x>0) || !isFinite(x)){ $('err').innerHTML=`<div class="err">القيمة ${r.inp.label} لازم تكون رقم أكبر من صفر.</div>`; return; }
+      v[r.inp.k]=toBase(r.inp.k,x);
+    }
+  }
+  const needV=[...sel].some(id=>!cur.reqs.find(r=>r.id===id).noV);
+  const extra=cur.reqs.filter(r=>r.inp && usesInp(r)).map(r=>r.inp);
+  const given = cur.fields.filter(f=>f.k!=='V'||needV).concat(extra)
+    .map(f=> f.type==='select'
+      ? `<span>${f.label}: ${f.options.find(o=>o[0]===v[f.k])[1]}</span>`
+      : `<span>${f.label} = ${displayValue(f.k,v[f.k])} ${getUnit(f.k)}</span>`).join('');
+  let ac=0; const asked = cur.reqs.map((r,i)=>sel.has(r.id)?`<li><span>${++ac})</span><span>${reqHTML(r,false)}</span></li>`:'').join('');
+
+  $('paper').innerHTML =
+    `<div class="ptitle">${cur.name}</div>
+     ${cur.question?`<div class="qtext">${cur.question(v)}</div>`:''}
+     <div class="method-used"><b>طريقة حساب التوالي:</b> ${seriesMethodName()}</div>
+     <div class="phead">
+       <div class="pcirc">${cur.svg(v)}</div>
+       <div class="pinfo">
+         <div class="h">المعطيات:</div><div class="given">${given}</div>
+         <div class="h">المطلوب:</div><ul class="plist">${asked}</ul>
+       </div>
+     </div>
+     <div class="h sol-h">الحل:</div>
+     ${cur.solve(v,sel,seriesMethod)}`;
+  $('paperWrap').hidden=false;
+  solved=true;
+  if(auto!==true) $('paperWrap').scrollIntoView({behavior:'smooth',block:'start'});
+}
+/* تحديث الحل تلقائيًا (نص السؤال والمعطيات والمطاليب) عند أي تغيير بعد أن يظهر الحل */
+function autoRefresh(){
+  if(!solved) return;
+  solveNow(true);
+  $('err').innerHTML='';
+}
+['input','change'].forEach(ev=>$('reqs').addEventListener(ev,()=>updateQuestion()));
+['vals','reqs'].forEach(id=>{
+  $(id).addEventListener('input',autoRefresh);
+  $(id).addEventListener('change',autoRefresh);
+});
+
+CIRCUITS.forEach(c=>{const o=document.createElement('option');o.value=c.id;o.textContent=c.name;$('circuit').appendChild(o);});
+$('circuit').addEventListener('change',()=>{cur=CIRCUITS.find(c=>c.id===$('circuit').value);solved=false;buildForm();});
+$('solveBtn').addEventListener('click',solveNow);
+document.querySelectorAll('input[name="seriesMethod"]').forEach(el=>el.addEventListener('change',e=>{
+  seriesMethod=e.target.value;
+  $('err').innerHTML='';
+  autoRefresh();
+}));
+buildForm();
+</script>
+<script>
+/* ============ الميزات الإضافية: حفظ الإعدادات، طباعة، صورة، نسخ ============ */
+(function(){
+  var LS_KEY='mixcap_settings_v1';
+  function lsGet(){ try{ return JSON.parse(localStorage.getItem(LS_KEY))||{}; }catch(e){ return {}; } }
+  function lsSet(o){ try{ localStorage.setItem(LS_KEY,JSON.stringify(o)); }catch(e){} }
+
+  /* ---------- إشعار ---------- */
+  var toastT;
+  function toast(msg,ms){
+    var t=$('toast'); t.textContent=msg; t.classList.add('show');
+    clearTimeout(toastT); toastT=setTimeout(function(){ t.classList.remove('show'); }, ms||2600);
+  }
+
+  /* ---------- حفظ واسترجاع الإعدادات ---------- */
+  function snapshot(){
+    var d={};
+    document.querySelectorAll('#vals input,#vals select,#reqs input,#reqs select').forEach(function(e){
+      if(!e.id) return;
+      d[e.id]= e.type==='checkbox' ? e.checked : e.value;
+    });
+    return d;
+  }
+  function saveState(){
+    var st=lsGet(); st.circuit=cur.id; st.method=seriesMethod;
+    st.data=st.data||{}; st.data[cur.id]=snapshot();
+    lsSet(st);
+  }
+  function applySaved(id){
+    var st=lsGet(), d=st.data&&st.data[id];
+    if(!d) return;
+    Object.keys(d).forEach(function(k){
+      var e=$(k); if(!e) return;
+      if(e.type==='checkbox') e.checked=!!d[k]; else e.value=d[k];
+    });
+    drawPreview(); updateInfo(); refreshReqText();
+  }
+  ['vals','reqs'].forEach(function(id){
+    ['input','change'].forEach(function(ev){ $(id).addEventListener(ev,saveState); });
+  });
+  $('circuit').addEventListener('change',function(){ applySaved(cur.id); saveState(); });
+  document.querySelectorAll('input[name="seriesMethod"]').forEach(function(el){
+    el.addEventListener('change',saveState);
+  });
+  $('resetBtn').addEventListener('click',function(){
+    var st=lsGet(); if(st.data) delete st.data[cur.id]; lsSet(st);
+    buildForm(); solved=false;
+    toast('رجعت القيم الافتراضية لهذه الدائرة');
+  });
+  /* استرجاع عند فتح المحاكي */
+  (function restore(){
+    var st=lsGet();
+    if(st.method){
+      var r=document.querySelector('input[name="seriesMethod"][value="'+st.method+'"]');
+      if(r){ r.checked=true; seriesMethod=st.method; }
+    }
+    if(st.circuit && st.circuit!==cur.id){
+      var c=CIRCUITS.find(function(x){return x.id===st.circuit;});
+      if(c){ $('circuit').value=c.id; cur=c; solved=false; buildForm(); }
+    }
+    applySaved(cur.id);
+  })();
+
+  /* ---------- حالة الأزرار (تبقى مفعّلة لكن تُعتّم قبل الحل) ---------- */
+  var paperEl=$('paper');
+  function hasSolution(){ return !!paperEl.querySelector('.ptitle'); }
+  function syncTools(){
+    var ok=hasSolution();
+    ['btnPrint','btnShot','btnPdf','btnCopy'].forEach(function(id){ $(id).classList.toggle('is-off',!ok); });
+    $('fab').hidden=!ok;
+    document.body.classList.toggle('has-fab',ok);
+  }
+  new MutationObserver(syncTools).observe(paperEl,{childList:true});
+  syncTools();
+  function needSolution(){
+    if(hasSolution()) return false;
+    toast('اختر مطلوبًا واحدًا على الأقل ثم اضغط «احسب» أولًا');
+    return true;
+  }
+  var framed=false; try{ framed=window.self!==window.top; }catch(e){ framed=true; }
+
+  /* ---------- نافذة النتيجة ---------- */
+  var modalUrl=null;
+  function closeModal(){
+    $('outModal').hidden=true; $('mBody').innerHTML=''; $('mActs').innerHTML='';
+    if(modalUrl){ try{ URL.revokeObjectURL(modalUrl); }catch(e){} modalUrl=null; }
+  }
+  function openModal(o){
+    $('mTitle').textContent=o.title; $('mMsg').textContent=o.msg||'';
+    $('mBody').innerHTML=''; if(o.node) $('mBody').appendChild(o.node);
+    var acts=$('mActs'); acts.innerHTML='';
+    (o.actions||[]).concat([{label:'إغلاق',fn:closeModal}]).forEach(function(a){
+      var b=document.createElement('button'); b.type='button'; b.textContent=a.label;
+      if(a.primary) b.className='primary';
+      b.addEventListener('click',function(){ try{ a.fn(); }catch(e){ toast('تعذّر تنفيذ الأمر'); } });
+      acts.appendChild(b);
+    });
+    $('outModal').hidden=false;
+    if(o.after) o.after();
+  }
+  $('mClose').addEventListener('click',closeModal);
+  $('outModal').addEventListener('click',function(e){ if(e.target===this) closeModal(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape' && !$('outModal').hidden) closeModal(); });
+
+  /* ---------- طباعة ---------- */
+  var inApp=/FBAN|FBAV|Instagram|Telegram|Line\/|MicroMessenger|Snapchat|TikTok|WhatsApp|; wv\)/i.test(navigator.userAgent);
+  $('btnPrint').addEventListener('click',function(){
+    if(needSolution()) return;
+    if(framed||inApp){
+      openModal({title:'الطباعة',
+        msg:'هذه النافذة ('+(framed?'المعاينة':'متصفح التطبيق')+') تمنع الطباعة المباشرة. اضغط «PDF» وبعدها افتح الملف واطبعه، أو افتح المحاكي بكروم/سفاري.',
+        actions:[{label:'📄 جهّز PDF للطباعة',primary:true,fn:function(){ closeModal(); run('solution','pdf'); }},
+                 {label:'🖨️ جرّب الطباعة',fn:function(){ try{ window.print(); }catch(e){ toast('الطباعة غير متاحة هنا'); } }}]});
+      return;
+    }
+    try{ window.print(); }catch(e){ toast('الطباعة غير متاحة هنا. استخدم زر PDF.',4000); run('solution','pdf'); }
+  });
+
+  /* ---------- نسخ الحل كنص ---------- */
+  var SUBS='₀₁₂₃₄₅₆₇₈₉', SUPS={'0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹','-':'⁻','−':'⁻'};
+  var BLOCK={DIV:1,P:1,LI:1,UL:1,OL:1,TR:1,H1:1,H2:1,H3:1};
+  function wrapFr(t){ return /[\s+\-−×\/]/.test(t) ? '('+t+')' : t; }
+  function plain(node){
+    if(node.nodeType===3) return node.nodeValue.replace(/\s+/g,' ');
+    if(node.nodeType!==1) return '';
+    var tag=node.tagName, cl=node.classList;
+    if(tag==='svg'||tag==='SVG'||tag==='STYLE'||cl.contains('pcirc')) return '';
+    if(cl.contains('fr')){
+      var sp=node.children;
+      return wrapFr(plain(sp[0]).trim())+'/'+wrapFr(plain(sp[1]).trim());
+    }
+    var inner=''; node.childNodes.forEach(function(ch){ inner+=plain(ch); });
+    if(tag==='SUB'){
+      var t=inner.trim();
+      return /^[0-9]+$/.test(t) ? t.replace(/\d/g,function(d){return SUBS[d];}) : t;
+    }
+    if(tag==='SUP'){
+      var u=inner.trim();
+      return /^[0-9\-−]+$/.test(u) ? u.replace(/[0-9\-−]/g,function(d){return SUPS[d];}) : '^'+u;
+    }
+    var isBlock = BLOCK[tag] || (tag==='SPAN' && node.parentNode && node.parentNode.classList && node.parentNode.classList.contains('given'));
+    if(cl.contains('sec')||cl.contains('h')) return '\u0001'+inner.trim()+'\n';
+    if(tag==='SPAN' && node.parentNode && node.parentNode.tagName==='LI') return inner.trim()+' ';
+    if(isBlock) return '\n'+inner.trim()+'\n';
+    return inner;
+  }
+  function solutionText(){
+    var t=plain(paperEl).replace(/[ \t]*\n[ \t]*/g,'\n').replace(/\n{2,}/g,'\n').replace(/ {2,}/g,' ').replace(/\n?\u0001/g,'\n\n').trim();
+    return t+'\n\n— محاكي الربط المختلط | الحقوق محفوظة © الأستاذ علي عبدالستار';
+  }
+  function copyViaExec(txt){
+    var ta=document.createElement('textarea'); ta.value=txt; ta.setAttribute('readonly','');
+    ta.style.cssText='position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;font-size:16px';
+    document.body.appendChild(ta); ta.focus(); ta.select(); ta.setSelectionRange(0,txt.length);
+    var ok=false; try{ ok=document.execCommand('copy'); }catch(e){}
+    ta.remove(); return ok;
+  }
+  function copyManual(txt){
+    var ta=document.createElement('textarea'); ta.value=txt; ta.readOnly=false;
+    openModal({title:'نسخ الحل',
+      msg:'المتصفح منع النسخ التلقائي. اضغط داخل المربع ثم «تحديد الكل» وانسخ النص.',
+      node:ta,
+      actions:[{label:'تحديد الكل',primary:true,fn:function(){ ta.focus(); ta.select(); ta.setSelectionRange(0,txt.length); }}],
+      after:function(){ ta.focus(); ta.select(); }});
+  }
+  function doCopy(){
+    if(needSolution()) return;
+    var txt=solutionText();
+    if(copyViaExec(txt)){ toast('✅ تم نسخ الحل'); return; }
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(txt).then(function(){ toast('✅ تم نسخ الحل'); }, function(){ copyManual(txt); });
+      return;
+    }
+    copyManual(txt);
+  }
+  $('btnCopy').addEventListener('click',doCopy);
+  $('fabCopy').addEventListener('click',doCopy);
+
+  /* ---------- الحل كصورة / PDF / مشاركة ---------- */
+  /* احتياط: صورة نصية بسيطة تُرسم مباشرة على canvas (تشتغل بكل المتصفحات) */
+  function buildTextBlob(){
+    return new Promise(function(resolve,reject){
+      try{
+        var W=900,pad=34,fs=26,lh=42,bar=64,maxW=W-pad*2;
+        var font='bold '+fs+'px Tahoma,"Segoe UI",Arial,sans-serif';
+        var raw=solutionText().split('\n'), lines=[];
+        var m=document.createElement('canvas').getContext('2d'); m.font=font;
+        raw.forEach(function(l){
+          if(!l.trim()){ lines.push(''); return; }
+          var words=l.split(' '), cur='';
+          words.forEach(function(w){
+            var test=cur?cur+' '+w:w;
+            if(m.measureText(test).width>maxW && cur){ lines.push(cur); cur=w; } else cur=test;
+          });
+          lines.push(cur);
+        });
+        var H=bar*2+pad*2+lines.length*lh;
+        var cv=document.createElement('canvas'); cv.width=W; cv.height=H;
+        var cx=cv.getContext('2d');
+        cx.fillStyle='#fff'; cx.fillRect(0,0,W,H);
+        cx.fillStyle='#0d3f8d'; cx.fillRect(0,0,W,bar); cx.fillRect(0,H-bar,W,bar);
+        cx.fillStyle='#ffd166'; cx.fillRect(0,bar-4,W,4); cx.fillRect(0,H-bar,W,4);
+        cx.font=font; cx.textBaseline='middle';
+        try{ cx.direction='rtl'; }catch(e){}
+        cx.textAlign='center'; cx.fillStyle='#ffd166';
+        cx.fillText('محاكي الربط المختلط | الحقوق محفوظة © الأستاذ علي عبدالستار',W/2,bar/2);
+        cx.fillText('جميع الحقوق محفوظة © الأستاذ علي عبدالستار',W/2,H-bar/2+2);
+        cx.textAlign='right'; cx.fillStyle='#173f82';
+        lines.forEach(function(l,i){
+          try{ cx.direction=/[\u0600-\u06FF]/.test(l)?'rtl':'ltr'; }catch(e){}
+          cx.fillText(l,W-pad,bar+pad+i*lh+lh/2);
+        });
+        cv.toBlob(function(b){ b?resolve(b):reject(new Error('blob')); },'image/png');
+      }catch(e){ reject(e); }
+    });
+  }
+  function downloadBlob(blob,name){
+    var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); },4000);
+  }
+  /* ---------- رسم الصفحة على canvas (بدون foreignObject → يشتغل بسفاري وكل المتصفحات) ---------- */
+  function rrPath(cx,x,y,w,h,r){
+    r=Math.max(0,Math.min(r,w/2,h/2)); cx.beginPath(); cx.moveTo(x+r,y);
+    cx.arcTo(x+w,y,x+w,y+h,r); cx.arcTo(x+w,y+h,x,y+h,r); cx.arcTo(x,y+h,x,y,r); cx.arcTo(x,y,x+w,y,r); cx.closePath();
+  }
+  function alphaOf(c){ var m=(c||'').match(/rgba?\(([^)]+)\)/); if(!m) return 0; var p=m[1].split(','); return p.length>3?parseFloat(p[3]):1; }
+  function domToCanvas(root){
+    return new Promise(function(resolve,reject){
+      try{
+        var rr=root.getBoundingClientRect(), W=Math.ceil(rr.width), H=Math.ceil(rr.height);
+        var sc=Math.max(1,Math.min(2,Math.sqrt(12e6/(W*H))));
+        var cv=document.createElement('canvas'); cv.width=Math.round(W*sc); cv.height=Math.round(H*sc);
+        var cx=cv.getContext('2d'); cx.fillStyle='#fff'; cx.fillRect(0,0,cv.width,cv.height); cx.scale(sc,sc);
+        var jobs=[], rg=document.createRange();
+
+        function txt(n){
+          var t=n.nodeValue; if(!/\S/.test(t)) return;
+          var cs=getComputedStyle(n.parentNode);
+          cx.font=cs.fontStyle+' '+cs.fontWeight+' '+cs.fontSize+' '+cs.fontFamily;
+          cx.fillStyle=cs.color; cx.textAlign='left'; cx.textBaseline='middle';
+          var re=/\S+/g, m;
+          while((m=re.exec(t))){
+            rg.setStart(n,m.index); rg.setEnd(n,m.index+m[0].length);
+            var rs=rg.getClientRects(), q=rs[0]; if(!q||!q.width) continue;
+            if(rs.length===1){
+              try{ cx.direction=/[\u0590-\u08FF]/.test(m[0])?'rtl':(/[A-Za-z\u00B0-\u00FF\u2080-\u209F]/.test(m[0])?'ltr':cs.direction); }catch(e){}
+              cx.fillText(m[0],q.left-rr.left,q.top-rr.top+q.height/2+0.5,q.width+2);
+            }else{
+              /* كلمة تجزّأت بسبب اتجاه النص (أقواس/أرقام): نرسم كل حرف بمكانه */
+              for(var ci=0;ci<m[0].length;ci++){
+                rg.setStart(n,m.index+ci); rg.setEnd(n,m.index+ci+1);
+                var q2=rg.getClientRects()[0]; if(!q2||!q2.width) continue;
+                var ch=m[0].charAt(ci);
+                var dirv=/[\u0590-\u08FF]/.test(ch)?'rtl':(/[0-9A-Za-z\u00B0-\u00FF\u2080-\u209F]/.test(ch)?'ltr':cs.direction);
+                if(/[()\[\]{}]/.test(ch)){
+                  /* القوس ينعكس فقط إذا كان داخل مقطع RTL: نعرف ذلك من موضع الحرف المجاور */
+                  var open=/[(\[{]/.test(ch), ni=open?ci+1:ci-1;
+                  if(ni>=0&&ni<m[0].length){
+                    rg.setStart(n,m.index+ni); rg.setEnd(n,m.index+ni+1);
+                    var q3=rg.getClientRects()[0];
+                    if(q3&&q3.width) dirv=(open===(q3.left>q2.left))?'ltr':'rtl';
+                  }
+                }
+                try{ cx.direction=dirv; }catch(e){}
+                cx.fillText(ch,q2.left-rr.left,q2.top-rr.top+q2.height/2+0.5,q2.width+2);
+              }
+            }
+          }
+          if(/underline/.test(cs.textDecorationLine)){
+            rg.selectNodeContents(n);
+            Array.prototype.forEach.call(rg.getClientRects(),function(q){
+              cx.fillRect(q.left-rr.left,q.bottom-rr.top-2,q.width,1.5);
+            });
+          }
+        }
+        function box(el,cs,x,y,w,h){
+          if(el.classList.contains('paper')){
+            cx.fillStyle='#fffefd'; cx.fillRect(x,y,w,h);
+            cx.fillStyle='#d9e7f2'; for(var yy=33;yy<h;yy+=34) cx.fillRect(x,y+yy,w,1);
+            cx.fillStyle='#df6a6a'; cx.fillRect(x+w-45,y,2,h);
+            cx.globalAlpha=.55; cx.fillRect(x+w-48,y,1,h); cx.globalAlpha=1; return;
+          }
+           var rad=parseFloat(cs.borderTopLeftRadius)||0, bg=cs.backgroundColor, bi=cs.backgroundImage;
+          var fill=null;
+          if(alphaOf(bg)>0) fill=bg;
+          else if(bi && bi.indexOf('linear-gradient')>-1){
+            var cols=bi.match(/rgba?\([^)]*\)/g);
+            if(cols&&cols.length){
+              var ang=(bi.match(/(-?\d+)deg/)||[])[1];
+              var g=(ang===undefined||+ang===180)?cx.createLinearGradient(x,y,x,y+h):cx.createLinearGradient(x,y,x+w,y+h);
+              cols.forEach(function(c,i){ g.addColorStop(cols.length>1?i/(cols.length-1):0,c); });
+              fill=g;
+            }
+          }
+          if(fill){ cx.fillStyle=fill; if(rad){ rrPath(cx,x,y,w,h,rad); cx.fill(); } else cx.fillRect(x,y,w,h); }
+          var S=['Top','Right','Bottom','Left'], bw=S.map(function(s){
+            return cs['border'+s+'Style']==='none'||!alphaOf(cs['border'+s+'Color']) ? 0 : (parseFloat(cs['border'+s+'Width'])||0);
+          });
+          if(rad && bw[0]&&bw[0]===bw[1]&&bw[1]===bw[2]&&bw[2]===bw[3]){
+            cx.strokeStyle=cs.borderTopColor; cx.lineWidth=bw[0]; rrPath(cx,x+bw[0]/2,y+bw[0]/2,w-bw[0],h-bw[0],rad); cx.stroke(); return;
+          }
+          S.forEach(function(s,i){
+            if(!bw[i]) return; cx.fillStyle=cs['border'+s+'Color'];
+            if(s==='Top') cx.fillRect(x,y,w,bw[i]); else if(s==='Bottom') cx.fillRect(x,y+h-bw[i],w,bw[i]);
+            else if(s==='Left') cx.fillRect(x,y,bw[i],h); else cx.fillRect(x+w-bw[i],y,bw[i],h);
+          });
+        }
+        function ctl(el,cs,x,y,w,h){
+          var tag=el.tagName.toLowerCase(), type=(el.type||'').toLowerCase();
+          if(type==='checkbox'||type==='radio'){
+            var s=Math.min(w,h,16), mx=x+w/2, my=y+h/2;
+            cx.strokeStyle='#1767d7'; cx.fillStyle='#1767d7'; cx.lineWidth=1.5;
+            if(type==='radio'){
+              cx.beginPath(); cx.arc(mx,my,s/2-1,0,7); cx.stroke();
+              if(el.checked){ cx.beginPath(); cx.arc(mx,my,s/4,0,7); cx.fill(); }
+            }else{
+              rrPath(cx,mx-s/2,my-s/2,s,s,3);
+              if(el.checked){
+                cx.fill(); cx.strokeStyle='#fff'; cx.lineWidth=2; cx.beginPath();
+                cx.moveTo(mx-s/4,my); cx.lineTo(mx-s/12,my+s/4); cx.lineTo(mx+s/4,my-s/4); cx.stroke();
+              } else cx.stroke();
+            }
+            return;
+          }
+          var v= tag==='select' ? (el.selectedOptions&&el.selectedOptions[0]?el.selectedOptions[0].text:'') : el.value;
+          if(!v) return;
+          var pl=(parseFloat(cs.paddingLeft)||0)+(parseFloat(cs.borderLeftWidth)||0);
+          var pr=(parseFloat(cs.paddingRight)||0)+(parseFloat(cs.borderRightWidth)||0);
+          var rtl=cs.direction==='rtl', a=cs.textAlign;
+          if(a==='start') a=rtl?'right':'left'; else if(a==='end') a=rtl?'left':'right';
+          cx.font=cs.fontStyle+' '+cs.fontWeight+' '+cs.fontSize+' '+cs.fontFamily;
+          cx.fillStyle=cs.color; cx.textBaseline='middle'; cx.textAlign=(a==='center'||a==='right')?a:'left';
+          try{ cx.direction=cs.direction; }catch(e){}
+          cx.fillText(v,a==='center'?x+w/2:(a==='right'?x+w-pr:x+pl),y+h/2+0.5,Math.max(10,w-pl-pr));
+        }
+        function svgJob(el,x,y,w,h){
+          return new Promise(function(res){
+            var done=false; function fin(){ if(!done){ done=true; res(); } }
+            setTimeout(fin,5000);
+            try{
+              var cl=el.cloneNode(true);
+              var oa=[el].concat([].slice.call(el.querySelectorAll('*'))), ca=[cl].concat([].slice.call(cl.querySelectorAll('*')));
+              var props=['fill','stroke','stroke-width','stroke-dasharray','stroke-linecap','stroke-linejoin','opacity','font-family','font-size','font-weight','font-style','text-anchor'];
+              oa.forEach(function(o,i){
+                var s=getComputedStyle(o), st=''; props.forEach(function(p){ st+=p+':'+s.getPropertyValue(p)+';'; });
+                ca[i].setAttribute('style',(ca[i].getAttribute('style')||'')+';'+st);
+              });
+              cl.setAttribute('xmlns','http://www.w3.org/2000/svg'); cl.setAttribute('width',w); cl.setAttribute('height',h);
+              var img=new Image();
+              img.onload=function(){ try{ cx.drawImage(img,x,y,w,h); }catch(e){} fin(); };
+              img.onerror=fin;
+              img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(new XMLSerializer().serializeToString(cl));
+            }catch(e){ fin(); }
+          });
+        }
+        function walk(el,isRoot){
+          if(el.nodeType===3){ txt(el); return; }
+          if(el.nodeType!==1) return;
+          var tag=el.tagName.toLowerCase();
+          if(tag==='style'||tag==='script'||tag==='option'||el.hidden) return;
+          var cs=getComputedStyle(el);
+          if(cs.display==='none'||cs.visibility==='hidden'||+cs.opacity===0) return;
+          if(!isRoot && cs.position==='fixed') return;
+          var r=el.getBoundingClientRect(), x=r.left-rr.left, y=r.top-rr.top;
+          if(tag==='svg'){ jobs.push(svgJob(el,x,y,r.width,r.height)); return; }
+          var oa=cx.globalAlpha; if(+cs.opacity<1) cx.globalAlpha=oa*(+cs.opacity);
+          box(el,cs,x,y,r.width,r.height);
+          if(tag==='input'||tag==='select'||tag==='textarea') ctl(el,cs,x,y,r.width,r.height);
+          else for(var c=el.firstChild;c;c=c.nextSibling) walk(c,false);
+          cx.globalAlpha=oa;
+        }
+        walk(root,true);
+        Promise.all(jobs).then(function(){ resolve(cv); },reject);
+      }catch(e){ reject(e); }
+    });
+  }
+  function captureSolution(){
+    var W=820, wrap=document.createElement('div');
+    var vars='--bg:#edf6ff;--ink:#143c78;--line:#cfe0ef;--blue:#1767d7;--blue2:#0c438f;--red:#e64a3b;--green:#15946b;--purple:#6742b8;--paper:#fffefd;--rule:#d9e7f2;--margin:#df6a6a';
+    wrap.style.cssText='position:fixed;left:-30000px;top:0;width:'+W+'px;background:#fff;direction:rtl;color:#143c78;line-height:1.6;font-family:Tahoma,"Noto Naskh Arabic","Segoe UI",Arial,sans-serif;'+vars;
+    var barCss='text-align:center;padding:12px 16px;font-weight:900;font-size:22px;color:#ffd166;background:#0d3f8d;';
+    var top=document.createElement('div'); top.setAttribute('style',barCss+'border-bottom:3px solid #ffd166');
+    top.innerHTML='محاكي الربط المختلط &nbsp;|&nbsp; الحقوق محفوظة © <b style="color:#fff">الأستاذ علي عبدالستار</b>';
+    var pc=paperEl.cloneNode(true); pc.removeAttribute('id'); pc.style.minHeight='0';
+    var bot=document.createElement('div'); bot.setAttribute('style',barCss+'border-top:3px solid #ffd166');
+    bot.innerHTML='جميع الحقوق محفوظة © <b style="color:#fff">الأستاذ علي عبدالستار</b>';
+    wrap.appendChild(top); wrap.appendChild(pc); wrap.appendChild(bot);
+    document.body.appendChild(wrap);
+    return domToCanvas(wrap).then(function(cv){ wrap.remove(); return cv; },function(e){ wrap.remove(); throw e; });
+  }
+  function captureScreen(){
+    document.body.classList.add('capturing');
+    return new Promise(function(r){ setTimeout(r,60); }).then(function(){ return domToCanvas(document.body); })
+      .then(function(cv){ document.body.classList.remove('capturing'); return cv; },
+            function(e){ document.body.classList.remove('capturing'); throw e; });
+  }
+  function captureCanvas(scope){ return scope==='screen' ? captureScreen() : captureSolution(); }
+  function canvasBlob(cv,type,q){
+    return new Promise(function(res,rej){ cv.toBlob(function(b){ b?res(b):rej(new Error('blob')); },type,q); });
+  }
+  window.__buildShotBlob=function(){ return captureCanvas('solution').then(function(cv){ return canvasBlob(cv,'image/png'); }); };
+  window.__buildTextBlob=buildTextBlob;
+
+  /* ---------- PDF بدون مكتبات: كل صفحة A4 = صورة JPEG ---------- */
+  function blobBytes(b){
+    return new Promise(function(res,rej){
+      var fr=new FileReader(); fr.onload=function(){ res(new Uint8Array(fr.result)); }; fr.onerror=rej; fr.readAsArrayBuffer(b);
+    });
+  }
+  function s2u(s){ var u=new Uint8Array(s.length); for(var i=0;i<s.length;i++) u[i]=s.charCodeAt(i)&255; return u; }
+  function assemblePdf(pages,iw,ih){
+    var parts=[], offs=[], len=0, n=pages.length, N=2+3*n;
+    function push(u){ parts.push(u); len+=u.length; }
+    function ps(s){ push(s2u(s)); }
+    function obj(id,head,stream){
+      offs[id]=len; ps(id+' 0 obj\n'+head);
+      if(stream){ ps('\nstream\n'); push(stream); ps('\nendstream'); }
+      ps('\nendobj\n');
+    }
+    ps('%PDF-1.4\n%\xE2\xE3\xCF\xD3\n');
+    obj(1,'<< /Type /Catalog /Pages 2 0 R >>');
+    var kids=[]; for(var i=0;i<n;i++) kids.push((3+3*i)+' 0 R');
+    obj(2,'<< /Type /Pages /Kids ['+kids.join(' ')+'] /Count '+n+' >>');
+    pages.forEach(function(jpg,i){
+      var pid=3+3*i, cid=pid+1, iid=pid+2, cs='q 595.28 0 0 841.89 0 0 cm /Im0 Do Q';
+      obj(pid,'<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /XObject << /Im0 '+iid+' 0 R >> >> /Contents '+cid+' 0 R >>');
+      obj(cid,'<< /Length '+cs.length+' >>',s2u(cs));
+      obj(iid,'<< /Type /XObject /Subtype /Image /Width '+iw+' /Height '+ih+' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length '+jpg.length+' >>',jpg);
+    });
+    var xo=len; ps('xref\n0 '+(N+1)+'\n0000000000 65535 f \n');
+    for(var k=1;k<=N;k++) ps(('0000000000'+offs[k]).slice(-10)+' 00000 n \n');
+    ps('trailer\n<< /Size '+(N+1)+' /Root 1 0 R >>\nstartxref\n'+xo+'\n%%EOF');
+    return new Blob(parts,{type:'application/pdf'});
+  }
+  function canvasToPdf(cv){
+    var pw=cv.width, m=Math.round(pw*0.04), ph=Math.round(pw*1.41421);
+    var uw=pw-2*m, uh=ph-2*m, f=uw/cv.width, pl=[];
+    if(cv.height*f<=uh*1.25){
+      f=Math.min(f,uh/cv.height); pl.push({sy:0,sh:cv.height,f:f});
+    }else{
+      var step=Math.floor(uh/f);
+      for(var y=0;y<cv.height;y+=step) pl.push({sy:y,sh:Math.min(step,cv.height-y),f:f});
+    }
+    var jpgs=[], first=null, chain=Promise.resolve();
+    pl.forEach(function(p,i){
+      chain=chain.then(function(){
+        var pc=document.createElement('canvas'); pc.width=pw; pc.height=ph;
+        var c2=pc.getContext('2d'); c2.fillStyle='#fff'; c2.fillRect(0,0,pw,ph);
+        var dw=cv.width*p.f, dh=p.sh*p.f;
+        c2.drawImage(cv,0,p.sy,cv.width,p.sh,m+(uw-dw)/2,m,dw,dh);
+        return canvasBlob(pc,'image/jpeg',0.92);
+      }).then(function(b){ if(i===0) first=b; return blobBytes(b); })
+        .then(function(u){ jpgs.push(u); });
+    });
+    return chain.then(function(){ return {blob:assemblePdf(jpgs,pw,ph),preview:first}; });
+  }
+
+  /* ---------- بناء الناتج + نافذة المعاينة والمشاركة ---------- */
+  var busy=false;
+  function build(scope,fmt){
+    return captureCanvas(scope).then(function(cv){
+      if(fmt==='pdf') return canvasToPdf(cv);
+      return canvasBlob(cv,'image/png').then(function(b){ return {blob:b,preview:b}; });
+    });
+  }
+  function showResult(res,scope,fmt){
+    var isPdf=fmt==='pdf', ext=isPdf?'pdf':'png', mime=isPdf?'application/pdf':'image/png';
+    var name='mixed-capacitors-'+(scope==='screen'?'screen':'solution')+'.'+ext;
+    var file=null; try{ file=new File([res.blob],name,{type:mime}); }catch(e){}
+    var canShare=!!(file && navigator.canShare && navigator.canShare({files:[file]}));
+    modalUrl=URL.createObjectURL(res.blob);
+    var pUrl=res.preview===res.blob?modalUrl:URL.createObjectURL(res.preview);
+    var img=new Image(); img.src=pUrl; img.alt='معاينة';
+    var acts=[];
+    if(canShare) acts.push({label:'📤 مشاركة',primary:true,fn:function(){
+      navigator.share({files:[file],title:'محاكي الربط المختلط',text:'الأستاذ علي عبدالستار — الفيزياء أسهل مما تتخيل'}).catch(function(e){
+        if(e && e.name!=='AbortError') toast('تعذّرت المشاركة. احفظ الملف وارفعه يدويًا.',4200);
+      });
+    }});
+    acts.push({label:isPdf?'⬇ حفظ PDF':'⬇ حفظ الصورة',primary:!canShare,fn:function(){
+      downloadBlob(res.blob,name); toast(isPdf?'تم تجهيز الملف. إذا ما نزل استخدم «فتح».':'إذا ما نزلت الصورة: اضغط عليها مطولًا واختر حفظ',4200);
+    }});
+    if(isPdf) acts.push({label:'🖨️ فتح / طباعة',fn:function(){
+      if(!window.open(modalUrl,'_blank')) toast('المتصفح منع فتح النافذة. استخدم «حفظ PDF».',4000);
+    }});
+    openModal({title:isPdf?'📄 ملف PDF':'🖼️ الصورة',
+      msg:canShare?'جاهز. اضغط «مشاركة» واختر واتساب أو تيليجرام أو فيسبوك أو غيرها.'
+                  :'جاهز. هذا المتصفح ما يدعم المشاركة المباشرة، احفظ الملف وارفعه على الموقع اللي تريده.',
+      node:img, actions:acts});
+  }
+  function run(scope,fmt){
+    if(busy) return;
+    if(scope==='solution' && needSolution()) return;
+    busy=true; toast('⏳ جاري تجهيز '+(fmt==='pdf'?'الـ PDF':'الصورة')+'…',9000);
+    build(scope,fmt).catch(function(){
+      if(fmt==='png' && scope==='solution') return buildTextBlob().then(function(b){ return {blob:b,preview:b}; });
+      throw new Error('fail');
+    }).then(function(res){ $('toast').classList.remove('show'); showResult(res,scope,fmt); })
+      .catch(function(){ toast('تعذّر التجهيز. استخدم لقطة الشاشة.',4500); })
+      .then(function(){ busy=false; });
+  }
+  function shareMenu(){
+    openModal({title:'📤 مشاركة الشاشة',
+      msg:'اختر شنو تريد تشارك، وبأي صيغة (صورة أو PDF).',
+      actions:[
+        {label:'🖼️ صورة الحل',primary:true,fn:function(){ closeModal(); run('solution','png'); }},
+        {label:'📄 PDF الحل',primary:true,fn:function(){ closeModal(); run('solution','pdf'); }},
+        {label:'🖼️ صورة الشاشة كاملة',fn:function(){ closeModal(); run('screen','png'); }},
+        {label:'📄 PDF الشاشة كاملة',fn:function(){ closeModal(); run('screen','pdf'); }}
+      ]});
+  }
+  $('btnShot').addEventListener('click',function(){ run('solution','png'); });
+  $('btnPdf').addEventListener('click',function(){ run('solution','pdf'); });
+  $('btnShare').addEventListener('click',shareMenu);
+  $('fabShare').addEventListener('click',shareMenu);
+  window.__run=run;
+
+  /* ---------- شريط الجوال: انتقل للحل / رجوع للمعطيات ---------- */
+  var card=document.querySelector('.solution-card'), inView=false;
+  function fabLabel(){ $('fabGo').textContent = inView ? '⬆ المعطيات' : '⬇ انتقل للحل'; }
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(function(en){ inView=en[0].intersectionRatio>0.2; fabLabel(); },{threshold:[0,.2,.5]}).observe(card);
+  }
+  $('fabGo').addEventListener('click',function(){
+    if(inView) document.querySelector('.wrap').scrollIntoView({behavior:'smooth',block:'start'});
+    else card.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+})();
+</script>
+<script>
+(function(){
+  var s=document.getElementById('splash'),b=document.getElementById('startBtn');
+  document.body.classList.add('splash-open');
+  b.addEventListener('click',function(){
+    s.classList.add('out');document.body.classList.remove('splash-open');
+    setTimeout(function(){s.remove();},700);
+  });
+})();
+</script>
+</body>
+</html>
